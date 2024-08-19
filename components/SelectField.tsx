@@ -1,26 +1,30 @@
 "use client";
 
-import * as React from "react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
+import { useState } from "react";
+import {
+	FormControl,
+	Select,
+	SelectChangeEvent,
+	SelectProps,
+	MenuItem,
+	Checkbox,
+} from "@mui/material";
 
-interface Props {
+type CustomSelectProps = SelectProps & {
 	id: string;
 	labelName: string;
 	options: Array<string>;
-}
+};
 
-export default function SelectWithLabel({ id, labelName, options }: Props) {
-	const [selectValue, setSelectValue] = React.useState("");
+export default function SelectField({
+	id,
+	labelName,
+	options,
+}: CustomSelectProps) {
+	const [selectValue, setSelectValue] = useState<string>("");
 
 	const handleChange = (event: SelectChangeEvent) => {
-		const {
-			target: { value },
-		} = event;
-		setSelectValue(value);
+		setSelectValue(event.target.value);
 	};
 
 	return (
@@ -36,40 +40,43 @@ export default function SelectWithLabel({ id, labelName, options }: Props) {
 				// },
 			}}
 		>
-			<InputLabel id={`${id}-label`} className="leading-6 font-medium">
+			{/* <InputLabel id={`${id}-label`} className="leading-6 font-medium">
 				{labelName}
-			</InputLabel>
+			</InputLabel> */}
 			<Select
 				// notched={false}
-				labelId={`${id}-label`}
+				// labelId={`${id}-label`}
 				id={id}
 				value={selectValue}
 				label={labelName}
 				onChange={handleChange}
-				renderValue={selected => selected}
-				className="bg-white font-medium rounded-full transition-all ease-in-out duration-300 hover:bg-[#CCD5E0] focus:bg-[#CCD5E0]"
+				renderValue={value => {
+					if (value === "") {
+						return labelName;
+					}
+					return value;
+				}}
+				className="bg-white transition-all ease-in-out duration-300 hover:bg-[#CCD5E0] focus:bg-[#CCD5E0]"
 				sx={{
 					"& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input": {
-						// py: "12px",
+						py: "12px",
 						pl: "20px",
 						pr: "12px",
-						borderRadius: "50%",
 					},
-					".MuiOutlinedInput-notchedOutline": {
-						border: "none !important",
-					},
-					".css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
-						top: "200px",
-					},
+					borderRadius: "100px",
+					fontWeight: 500,
+					lineHeight: 1.5,
 				}}
 				MenuProps={{
 					PaperProps: {
 						sx: {
-							bgcolor: "white",
-							top: "130px !important",
+							top: "130px",
 							borderRadius: "24px",
+							boxShadow: "4px 4px 24px 0px #04032329",
 							"& .MuiMenuItem-root": {
-								padding: 2,
+								gap: "12px",
+								px: 2,
+								py: "12px",
 								fontWeight: 500,
 							},
 						},
@@ -89,6 +96,7 @@ export default function SelectWithLabel({ id, labelName, options }: Props) {
 										// stroke: '#9EAAB8',
 										fill: "#111111",
 									},
+									p: 0,
 								}}
 								checked={selectValue.indexOf(option) > -1}
 							/>

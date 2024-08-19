@@ -1,4 +1,4 @@
-import SelectWithLabel from "@/components/SelectWithLabel";
+import SelectField from "@/components/SelectField";
 import React from "react";
 
 export default function ProductsPage() {
@@ -11,14 +11,14 @@ export default function ProductsPage() {
 					<h1>Products: 64</h1>
 					<ul className="flex">
 						<li>
-							<SelectWithLabel
+							<SelectField
 								id="select-category"
 								labelName="Category"
 								options={categories}
 							/>
 						</li>
 						<li>
-							<SelectWithLabel id="select-tag" labelName="Tag" options={tags} />
+							<SelectField id="select-tag" labelName="Tag" options={tags} />
 						</li>
 					</ul>
 					<input type="search" name="" id="" />
