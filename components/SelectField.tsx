@@ -12,7 +12,7 @@ import {
 
 type CustomSelectProps = SelectProps & {
 	id: string;
-	labelName: string;
+	labelName?: string;
 	options: Array<string>;
 };
 
@@ -28,34 +28,18 @@ export default function SelectField({
 	};
 
 	return (
-		<FormControl
+		<FormControl className="w-full"
 			sx={{
-				m: 1,
-				minWidth: 227,
-
-				// to remove label on input click
-				// "& .MuiInputLabel-shrink": {
-				// 	opacity: 0,
-				// 	transition: "all 0.2s ease-in",
-				// },
+				// minWidth: 227,
 			}}
 		>
-			{/* <InputLabel id={`${id}-label`} className="leading-6 font-medium">
-				{labelName}
-			</InputLabel> */}
 			<Select
-				// notched={false}
-				// labelId={`${id}-label`}
 				id={id}
 				value={selectValue}
-				label={labelName}
 				onChange={handleChange}
-				renderValue={value => {
-					if (value === "") {
-						return labelName;
-					}
-					return value;
-				}}
+				displayEmpty={true}
+				renderValue={value => value === "" && labelName ? labelName : value}
+				// renderValue={value => labelName || value}
 				className="bg-white transition-all ease-in-out duration-300 hover:bg-[#CCD5E0] focus:bg-[#CCD5E0]"
 				sx={{
 					"& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input": {
@@ -70,7 +54,7 @@ export default function SelectField({
 				MenuProps={{
 					PaperProps: {
 						sx: {
-							top: "130px",
+							// top: "130px",
 							borderRadius: "24px",
 							boxShadow: "4px 4px 24px 0px #04032329",
 							"& .MuiMenuItem-root": {

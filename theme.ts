@@ -24,6 +24,19 @@ const theme = createTheme({
 				},
 			},
 		},
+		MuiPaper: {
+			// defaultProps:{
+			// 	sx:{
+			// 	   top: '120px'
+			// 	}
+			//  }
+			styleOverrides: {
+				root: {
+					top: '120px'
+				}
+			}
+		},
+		
 	},
 });
 
