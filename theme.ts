@@ -19,24 +19,34 @@ const theme = createTheme({
 			styleOverrides: {
 				root: {
 					[`& .${outlinedInputClasses.notchedOutline}`]: {
-						border: 'none',
+						border: "none",
 					},
 				},
 			},
 		},
 		MuiPaper: {
-			// defaultProps:{
-			// 	sx:{
-			// 	   top: '120px'
-			// 	}
-			//  }
 			styleOverrides: {
 				root: {
-					top: '120px'
-				}
-			}
+					top: "120px",
+				},
+			},
 		},
-		
+		MuiInputBase: {
+			styleOverrides: {
+				root: {
+					[`& .MuiInputBase-input`]: {
+						paddingTop: "10px",
+						paddingBottom: "10px",
+						height: "auto",
+						lineHeight: 1.5,
+					},
+					[`& .MuiInputBase-input::placeholder`]: {
+						opacity: 1,
+						color: "#75818F",
+					},
+				},
+			},
+		},
 	},
 });
 

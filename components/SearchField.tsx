@@ -26,36 +26,32 @@
 // 	);
 // }
 
-import * as React from "react";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-
-import IconButton from "@mui/material/IconButton";
-
+import { Paper, InputBase, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function CustomizedInputBase() {
 	return (
 		<Paper
 			component="form"
-            className="bg-white transition-all ease-in-out duration-300 border-2 border-transparent hover:border-[#111111] focus-within:border-[#111111]"
+			className="bg-white transition-all ease-in-out duration-300 border-2 border-transparent hover:border-[#111111] focus-within:border-[#111111]"
 			sx={{
-				p: "2px 4px",
+				pr: "12px",
+				pl: "2px",
 				display: "flex",
 				alignItems: "center",
 				borderRadius: "100px",
 				fontWeight: 500,
 				lineHeight: 1.5,
-                boxShadow: 'none'
+				boxShadow: "none",
 			}}
 		>
 			<IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-				<SearchIcon />
+				<SearchIcon sx={{ color: "#75818F" }} />
 			</IconButton>
 			<InputBase
-				sx={{ flex: 1 }}
+				sx={{ flex: 1, fontWeight: 500 }}
 				placeholder="Search"
-				inputProps={{ "aria-label": "search google maps" }}
+				inputProps={{ "aria-label": "search" }}
 			/>
 		</Paper>
 	);
