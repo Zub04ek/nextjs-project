@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material/styles";
 import { outlinedInputClasses } from "@mui/material/OutlinedInput";
 
 const inter = Inter({
-	weight: ["300", "400", "500", "700"],
+	weight: ["400", "500", "700"],
 	variable: "--font-inter",
 	subsets: ["latin"],
 	display: "swap",
@@ -27,7 +27,7 @@ const theme = createTheme({
 		MuiPaper: {
 			styleOverrides: {
 				root: {
-					top: "120px",
+					top: "120px !important",
 				},
 			},
 		},
@@ -47,6 +47,19 @@ const theme = createTheme({
 				},
 			},
 		},
+		MuiChip: {
+			styleOverrides: {
+				root: {
+					fontSize: "16px",
+					fontWeight: 400,
+					lineHeight: 1.5,
+					['& svg']: {
+						width: "16px",
+						height: "16px"
+					}
+				}
+			}
+		}
 	},
 });
 
