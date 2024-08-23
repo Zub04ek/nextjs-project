@@ -29,7 +29,7 @@
 import { Paper, InputBase, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-export default function CustomizedInputBase() {
+export default function SearchBar() {
 	return (
 		<Paper
 			component="form"

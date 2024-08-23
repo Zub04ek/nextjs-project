@@ -12,7 +12,7 @@ type CustomSelectProps = SelectProps & {
 	id: string;
 	labelName?: string;
 	options: Array<string>;
-	selectValue: Array<string>;
+	selectValue: Array<string> | string;
 	setSelectValue: Function;
 };
 
@@ -88,11 +88,9 @@ export default function SelectField({
 								sx={[
 									{
 										"& svg": {
-											// stroke: '#9EAAB8',
 											fill: "#9EAAB8",
 										},
 										"&.Mui-checked svg": {
-											// stroke: '#9EAAB8',
 											fill: "#111111",
 										},
 										p: 0,

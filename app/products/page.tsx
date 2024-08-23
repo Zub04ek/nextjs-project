@@ -1,48 +1,77 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ChipsArray from "@/components/ChipComponent";
-import SearchField from "@/components/SearchField";
+import ChipsArray from "@/components/ChipsArray";
+import SearchBar from "@/components/SearchBar";
 import SelectField from "@/components/SelectField";
+import ProductCard from "@/components/ProductCard";
+import axios from "axios";
 
-interface ChipData {
-	key: number;
-	label: string;
+const BASE_URL = "https://dummyjson.com";
+
+interface Product {
+	id: number;
+	title: string;
+	brand: string;
+	category: string;
+	price: number;
+	discountPercentage: number;
+	rating: number;
+	tags: string[];
+	thumbnail: string;
 }
 
 export default function ProductsPage() {
 	const categories = ["beauty", "health", "sport", "home"];
 	const tags = ["new", "updated", "old"];
-	const prices = ["highest price", "lowest price", "highest rating", "lowest rating"];
+	const prices = [
+		"highest price",
+		"lowest price",
+		"highest rating",
+		"lowest rating",
+	];
 
-	const [selectSort, setSelectSort] = useState<string[]>([]);
-	const [selectCategory, setSelectCategory] = useState<string[]>([]);
-	const [selectTag, setSelectTag] = useState<string[]>([]);
-	const [chipData, setChipData] = useState<ChipData[]>([]);
+	const [products, setProducts] = useState<Product[]>([]);
 
-	const handleDelete = (chipToDelete: ChipData) => () => {
-		if (chipToDelete.label === "all") {
-			setSelectCategory([]);
-			setSelectTag([]);
+	const [selectedSort, setSelectedSort] = useState<string>("");
+	const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+	const [selectedTag, setSelectedTag] = useState<string[]>([]);
+	const [chipData, setChipData] = useState<string[]>([]);
+
+	const handleDelete = (chipToDelete: string) => () => {
+		if (chipToDelete === "all") {
+			setSelectedCategory([]);
+			setSelectedTag([]);
 			return;
 		}
-		setChipData(() => chipData.filter(chip => chip.key !== chipToDelete.key));
-		const isCategory = selectCategory.includes(chipToDelete.label);
-		const isTag = selectTag.includes(chipToDelete.label);
+		setChipData(() => chipData.filter(chip => chip !== chipToDelete));
+		const isCategory = selectedCategory.includes(chipToDelete);
+		const isTag = selectedTag.includes(chipToDelete);
 		if (isCategory) {
-			setSelectCategory(prev => prev.filter(item => item !== chipToDelete.label))
+			setSelectedCategory(prev => prev.filter(item => item !== chipToDelete));
 		}
 		if (isTag) {
-			setSelectTag(prev => prev.filter(item => item !== chipToDelete.label))
+			setSelectedTag(prev => prev.filter(item => item !== chipToDelete));
 		}
 	};
 
 	useEffect(() => {
-		const allCriteria = (selectCategory.concat(selectTag)).map((val,index) => {
-			return {key: index, label: val}
-		});
-		setChipData(allCriteria)
-	}, [selectCategory, selectTag])
+		const fetchProducts = async () => {
+			try {
+				const { data } = await axios.get(`${BASE_URL}/products`);
+				const allProducts = data.products as Product[];
+				setProducts(allProducts);
+			} catch (error) {
+				console.log("error :>> ", error);
+			}
+		};
+		fetchProducts();
+	}, []);
+
+	useEffect(() => {
+		const allCriteria = selectedCategory.concat(selectedTag);
+		setChipData(allCriteria);
+	}, [selectedCategory, selectedTag]);
 
 	return (
 		<main className="min-h-screen">
@@ -55,8 +84,8 @@ export default function ProductsPage() {
 								id="sort"
 								options={prices}
 								multiple={false}
-								selectValue={selectSort}
-								setSelectValue={setSelectSort}
+								selectValue={selectedSort}
+								setSelectValue={setSelectedSort}
 							/>
 						</li>
 						<li className="flex-1">
@@ -64,47 +93,41 @@ export default function ProductsPage() {
 								id="select-category"
 								labelName="Category"
 								options={categories}
-								selectValue={selectCategory}
-								setSelectValue={setSelectCategory}
+								selectValue={selectedCategory}
+								setSelectValue={setSelectedCategory}
 								multiple
 							/>
 						</li>
 						<li className="flex-1">
-							<SelectField id="select-tag" labelName="Tag" options={tags} multiple selectValue={selectTag}
-								setSelectValue={setSelectTag}/>
+							<SelectField
+								id="select-tag"
+								labelName="Tag"
+								options={tags}
+								multiple
+								selectValue={selectedTag}
+								setSelectValue={setSelectedTag}
+							/>
 						</li>
 					</ul>
 					<div className="flex-[0_1_calc(20%-9.6px)]">
-						<SearchField />
+						<SearchBar />
 					</div>
 
 					{/* <input className="flex-[0_1_calc(20%-9.6px)]" type="search" name="" id="" /> */}
 				</div>
-				<ul className="flex gap-3 flex-wrap items-center">
-					{ chipData.length > 0 && <ChipsArray chipsArray={chipData} handleDelete={handleDelete}/>}
+				<ul className="min-h-8 flex gap-2 flex-wrap items-center">
+					{chipData.length > 0 && (
+						<ChipsArray chipsArray={chipData} handleDelete={handleDelete} />
+					)}
 				</ul>
-				<ul>
-					<li>
-						<div>
-							<div></div>
-							<div></div>
-							<div></div>
-						</div>
-					</li>
-					<li>
-						<div>
-							<div></div>
-							<div></div>
-							<div></div>
-						</div>
-					</li>
-					<li>
-						<div>
-							<div></div>
-							<div></div>
-							<div></div>
-						</div>
-					</li>
+				<ul className="flex gap-4 flex-wrap">
+					{products.map(product => {
+						return (
+							<li key={product.id} className="basis-[calc((100%-32px)/3)]">
+								<ProductCard product={product} />
+							</li>
+						);
+					})}
 				</ul>
 			</div>
 		</main>
