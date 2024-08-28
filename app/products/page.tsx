@@ -6,20 +6,7 @@ import SearchBar from "@/components/SearchBar";
 import SelectField from "@/components/SelectField";
 import ProductCard from "@/components/ProductCard";
 import axios from "axios";
-
-const BASE_URL = "https://dummyjson.com";
-
-interface Product {
-	id: number;
-	title: string;
-	brand: string;
-	category: string;
-	price: number;
-	discountPercentage: number;
-	rating: number;
-	tags: string[];
-	thumbnail: string;
-}
+import { Product } from "@/types";
 
 export default function ProductsPage() {
 	const categories = ["beauty", "health", "sport", "home"];
@@ -58,7 +45,7 @@ export default function ProductsPage() {
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
-				const { data } = await axios.get(`${BASE_URL}/products`);
+				const { data } = await axios.get(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`);
 				const allProducts = data.products as Product[];
 				setProducts(allProducts);
 			} catch (error) {
@@ -69,8 +56,7 @@ export default function ProductsPage() {
 	}, []);
 
 	useEffect(() => {
-		const allCriteria = selectedCategory.concat(selectedTag);
-		setChipData(allCriteria);
+		setChipData([...selectedCategory, ...selectedTag]);
 	}, [selectedCategory, selectedTag]);
 
 	return (

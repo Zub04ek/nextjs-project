@@ -1,15 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { Chip, ChipProps } from "@mui/material";
-
-interface Product {
-	thumbnail: string;
-	title: string;
-	brand: string;
-	rating: number;
-	price: number;
-	discountPercentage: number;
-}
+import { Product } from "@/types";
 
 type CustomProductProps = ChipProps & {
 	product: Product
