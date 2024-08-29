@@ -7,18 +7,28 @@ import SelectField from "@/components/SelectField";
 import ProductCard from "@/components/ProductCard";
 import axios from "axios";
 import { Product } from "@/types";
+import { QueriesResults, useQuery } from "@tanstack/react-query";
+import { getProducts } from "../actions";
 
 export default function ProductsPage() {
 	const categories = ["beauty", "health", "sport", "home"];
 	const tags = ["new", "updated", "old"];
-	const prices = [
+	const SORT_OPTIONS = [
 		"highest price",
 		"lowest price",
 		"highest rating",
 		"lowest rating",
 	];
 
-	const [products, setProducts] = useState<Product[]>([]);
+	// const {data, loading, error} = useFetch(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`);
+	// const allProducts = data?.products as Product[];
+
+	const {isPending, isError, data, error} = useQuery({
+		queryKey: ['products'],
+		queryFn: getProducts,
+	})
+
+	// const [products, setProducts] = useState<Product[]>([]);
 
 	const [selectedSort, setSelectedSort] = useState<string>("");
 	const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
@@ -42,18 +52,18 @@ export default function ProductsPage() {
 		}
 	};
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const { data } = await axios.get(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`);
-				const allProducts = data.products as Product[];
-				setProducts(allProducts);
-			} catch (error) {
-				console.log("error :>> ", error);
-			}
-		};
-		fetchProducts();
-	}, []);
+	// useEffect(() => {
+	// 	const fetchProducts = async () => {
+	// 		try {
+	// 			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`);
+	// 			const allProducts = data.products as Product[];
+	// 			setProducts(allProducts);
+	// 		} catch (error) {
+	// 			console.log("error :>> ", error);
+	// 		}
+	// 	};
+	// 	fetchProducts();
+	// }, []);
 
 	useEffect(() => {
 		setChipData([...selectedCategory, ...selectedTag]);
@@ -63,12 +73,12 @@ export default function ProductsPage() {
 		<main className="min-h-screen">
 			<div className="flex flex-col gap-10 max-w-7xl px-12 pt-16 pb-[100px] my-0 mx-auto">
 				<div className="flex gap-3 flex-wrap items-center">
-					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">Products: 64</h1>
+					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">Products: {data?.length}</h1>
 					<ul className="flex gap-3 flex-wrap flex-auto">
 						<li className="flex-1">
 							<SelectField
 								id="sort"
-								options={prices}
+								options={SORT_OPTIONS}
 								multiple={false}
 								selectValue={selectedSort}
 								setSelectValue={setSelectedSort}
@@ -107,7 +117,9 @@ export default function ProductsPage() {
 					)}
 				</ul>
 				<ul className="flex gap-4 flex-wrap">
-					{products.map(product => {
+					{isPending && <li>loading...</li>}
+					{isError && <li>Error: {error.message}</li>}
+					{data && data.map(product => {
 						return (
 							<li key={product.id} className="basis-[calc((100%-32px)/3)]">
 								<ProductCard product={product} />

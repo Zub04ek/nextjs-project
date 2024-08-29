@@ -4,15 +4,15 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/theme";
 import "./globals.css";
+import Providers from "@/components/Providers";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const open_sans = Open_Sans({
 	weight: ["700"],
 	variable: "--font-open-sans",
 	subsets: ["latin"],
 	display: "swap",
 });
-
 
 export const metadata: Metadata = {
 	title: "Next App",
@@ -28,7 +28,9 @@ export default function RootLayout({
 		<html lang="en" className={`${inter.variable} ${open_sans.variable}`}>
 			<body className="font-inter">
 				<AppRouterCacheProvider>
-					<ThemeProvider theme={theme}>{children}</ThemeProvider>
+					<ThemeProvider theme={theme}>
+						<Providers>{children}</Providers>
+					</ThemeProvider>
 				</AppRouterCacheProvider>
 			</body>
 		</html>
