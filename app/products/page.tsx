@@ -7,8 +7,9 @@ import SelectField from "@/components/SelectField";
 import ProductCard from "@/components/ProductCard";
 import axios from "axios";
 import { Product } from "@/types";
-import { QueriesResults, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../actions";
+import ProductCardSkeleton from "@/components/Products/ProductCardSkeleton";
 
 export default function ProductsPage() {
 	const categories = ["beauty", "health", "sport", "home"];
@@ -23,10 +24,10 @@ export default function ProductsPage() {
 	// const {data, loading, error} = useFetch(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`);
 	// const allProducts = data?.products as Product[];
 
-	const {isPending, isError, data, error} = useQuery({
-		queryKey: ['products'],
+	const { isPending, isError, data, error } = useQuery({
+		queryKey: ["products"],
 		queryFn: getProducts,
-	})
+	});
 
 	// const [products, setProducts] = useState<Product[]>([]);
 
@@ -73,7 +74,9 @@ export default function ProductsPage() {
 		<main className="min-h-screen">
 			<div className="flex flex-col gap-10 max-w-7xl px-12 pt-16 pb-[100px] my-0 mx-auto">
 				<div className="flex gap-3 flex-wrap items-center">
-					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">Products: {data?.length}</h1>
+					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">
+						Products: {data ? data.length : 0}
+					</h1>
 					<ul className="flex gap-3 flex-wrap flex-auto">
 						<li className="flex-1">
 							<SelectField
@@ -117,15 +120,23 @@ export default function ProductsPage() {
 					)}
 				</ul>
 				<ul className="flex gap-4 flex-wrap">
-					{isPending && <li>loading...</li>}
+					{/* {isPending && <li>loading...</li>} */}
 					{isError && <li>Error: {error.message}</li>}
-					{data && data.map(product => {
-						return (
-							<li key={product.id} className="basis-[calc((100%-32px)/3)]">
-								<ProductCard product={product} />
-							</li>
-						);
-					})}
+					{data
+						? data.map(product => {
+								return (
+									<li key={product.id} className="basis-[calc((100%-32px)/3)]">
+										<ProductCard product={product} />
+									</li>
+								);
+						  })
+						: new Array(9).fill(null).map((_, i) => {
+								return (
+									<li key={i} className="basis-[calc((100%-32px)/3)]">
+										<ProductCardSkeleton />
+									</li>
+								);
+						  })}
 				</ul>
 			</div>
 		</main>
