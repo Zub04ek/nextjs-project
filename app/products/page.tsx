@@ -84,7 +84,7 @@ export default function ProductsPage() {
 					<ul className="flex gap-3 flex-wrap flex-auto">
 						<li className="flex-1">
 							<SelectField
-								id="sort"
+								id="sortBy"
 								options={SORT_OPTIONS}
 								multiple={false}
 								selectValue={selectedSort}
@@ -93,7 +93,7 @@ export default function ProductsPage() {
 						</li>
 						<li className="flex-1">
 							<SelectField
-								id="select-category"
+								id="category"
 								labelName="Category"
 								options={categories || []}
 								selectValue={selectedCategory}
@@ -103,7 +103,7 @@ export default function ProductsPage() {
 						</li>
 						<li className="flex-1">
 							<SelectField
-								id="select-tag"
+								id="tag"
 								labelName="Tag"
 								options={tags}
 								multiple

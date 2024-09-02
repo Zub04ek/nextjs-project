@@ -9,6 +9,7 @@ import {
 import { CheckBox, Check } from "@mui/icons-material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createUrl } from "@/utils";
+import { useCallback } from "react";
 
 type CustomSelectProps = SelectProps & {
 	id: string;
@@ -81,15 +82,33 @@ export const SelectField = ({
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
+	// const createQueryString = useCallback(
+	// 	(name: string, value: string) => {
+	// 	  const params = new URLSearchParams(searchParams.toString())
+	// 	  params.set(name, value)
+	 
+	// 	  return params.toString()
+	// 	},
+	// 	[searchParams]
+	//   )
+
 	const handleChange = (event: SelectChangeEvent<typeof selectValue>) => {
 		const {
 			target: { value },
 		} = event;
-		const categorySearchParams = new URLSearchParams(searchParams.toString());
-		console.log('value :>> ', value);
-		// categorySearchParams.set("category", (value || value.split(",")));
-		const categoryURL = createUrl(pathname, categorySearchParams);
-		router.push(categoryURL, {scroll: false})
+		
+		const selectedSearchParams = new URLSearchParams(searchParams.toString());
+		// console.log('value :>> ', event);
+		if (value.length) {
+			selectedSearchParams.set(id, value.toString());
+		} else {
+			selectedSearchParams.delete(id)
+		}
+		
+		const queryString = createUrl(pathname, selectedSearchParams);
+		router.push(queryString)
+		// router.push(`${pathname}?${createQueryString(id, value.toString())}`)
+
 		setSelectValue(typeof value === "string" ? value.split(",") : value);
 	};
 
