@@ -6,10 +6,10 @@ type CustomChipProps = ChipProps & {
 	handleDelete: Function;
 };
 
-export default function ChipsArray({
+export const ChipsArray = ({
 	chipsArray,
 	handleDelete,
-}: CustomChipProps) {
+}: CustomChipProps) => {
 	return (
 		<>
 			{chipsArray.map(data => {

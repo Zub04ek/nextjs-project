@@ -7,14 +7,14 @@ type CustomProductProps = ChipProps & {
 	product: Product
 };
 
-export default function ProductCard({product: {
+export const ProductCard = ({product: {
 	thumbnail,
 	title,
 	brand,
 	rating,
 	price,
 	discountPercentage,
-}}: CustomProductProps) {
+}}: CustomProductProps) => {
 	return (
 		<a href="/products" className="block w-fit rounded-2xl bg-white overflow-hidden hover:shadow-[4px_4px_24px_0px_#04032329]">
 			<Image src={thumbnail} alt="product photo" width={384} height={310} className="w-[384px] h-auto object-cover"/>

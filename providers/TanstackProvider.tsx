@@ -5,8 +5,6 @@ import { PropsWithChildren } from "react"
 
 const client = new QueryClient()
 
-const Providers = ({children}: PropsWithChildren<{}>) => {
+export const TanstackProvider = ({children}: PropsWithChildren<{}>) => {
     return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }
-
-export default Providers

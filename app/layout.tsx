@@ -4,7 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/theme";
 import "./globals.css";
-import Providers from "@/components/Providers";
+import {TanstackProvider} from "@/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const open_sans = Open_Sans({
@@ -29,7 +29,7 @@ export default function RootLayout({
 			<body className="font-inter">
 				<AppRouterCacheProvider>
 					<ThemeProvider theme={theme}>
-						<Providers>{children}</Providers>
+						<TanstackProvider>{children}</TanstackProvider>
 					</ThemeProvider>
 				</AppRouterCacheProvider>
 			</body>

@@ -7,6 +7,8 @@ import {
 	Checkbox,
 } from "@mui/material";
 import { CheckBox, Check } from "@mui/icons-material";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { createUrl } from "@/utils";
 
 type CustomSelectProps = SelectProps & {
 	id: string;
@@ -66,18 +68,28 @@ const CheckboxStyles = (id: string) => [
 	},
 ];
 
-export default function SelectField({
+export const SelectField = ({
 	id,
 	labelName,
 	options,
 	multiple,
 	selectValue,
 	setSelectValue,
-}: CustomSelectProps) {
+}: CustomSelectProps) => {
+
+	const router = useRouter();
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+
 	const handleChange = (event: SelectChangeEvent<typeof selectValue>) => {
 		const {
 			target: { value },
 		} = event;
+		const categorySearchParams = new URLSearchParams(searchParams.toString());
+		console.log('value :>> ', value);
+		// categorySearchParams.set("category", (value || value.split(",")));
+		const categoryURL = createUrl(pathname, categorySearchParams);
+		router.push(categoryURL, {scroll: false})
 		setSelectValue(typeof value === "string" ? value.split(",") : value);
 	};
 
@@ -96,10 +108,13 @@ export default function SelectField({
 				MenuProps={MenuProps}
 			>
 				{options.map(option => {
+					
+
 					return (
 						<MenuItem
 							key={option}
 							value={option}
+							// onClick={() => router.push(categoryURL, {scroll: false})}
 							sx={MenuItemStyles}
 						>
 							<Checkbox

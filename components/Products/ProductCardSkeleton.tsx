@@ -1,6 +1,6 @@
 import { Chip } from "@mui/material";
 
-const ProductCardSkeleton = () => {
+export const ProductCardSkeleton = () => {
     return (
         <div className="block animate-pulse w-fit rounded-2xl bg-white overflow-hidden hover:shadow-[4px_4px_24px_0px_#04032329]">
 			<div className="w-[384px] h-[310px] bg-gray-200"/>
@@ -13,5 +13,3 @@ const ProductCardSkeleton = () => {
 		</div>
     )
 }
-
-export default ProductCardSkeleton

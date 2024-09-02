@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ChipsArray from "@/components/ChipsArray";
-import SearchBar from "@/components/SearchBar";
-import SelectField from "@/components/SelectField";
-import ProductCard from "@/components/ProductCard";
-import axios from "axios";
-import { Product } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "../actions";
-import ProductCardSkeleton from "@/components/Products/ProductCardSkeleton";
+import { getProducts, getCategoryList } from "../actions";
+import {ChipsArray} from "@/components/ChipsArray";
+import {SearchBar} from "@/components/SearchBar";
+import {SelectField} from "@/components/SelectField";
+import {ProductCard} from "@/components/Products/ProductCard";
+import {ProductCardSkeleton} from "@/components/Products/ProductCardSkeleton";
+// import axios from "axios";
+// import { Product } from "@/types";
 
-export default function ProductsPage() {
-	const categories = ["beauty", "health", "sport", "home"];
+// const categories = ["beauty", "health", "sport", "home"];
 	const tags = ["new", "updated", "old"];
 	const SORT_OPTIONS = [
 		"highest price",
@@ -21,13 +20,18 @@ export default function ProductsPage() {
 		"lowest rating",
 	];
 
-	// const {data, loading, error} = useFetch(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`);
-	// const allProducts = data?.products as Product[];
+export default function ProductsPage() {
+	
 
-	const { isPending, isError, data, error } = useQuery({
+	const { isPending, isError, data: products, error } = useQuery({
 		queryKey: ["products"],
 		queryFn: getProducts,
 	});
+	const { data: categories } = useQuery({
+		queryKey: ["categories"],
+		queryFn: getCategoryList,
+	});
+	// console.log('data :>> ', data);
 
 	// const [products, setProducts] = useState<Product[]>([]);
 
@@ -75,7 +79,7 @@ export default function ProductsPage() {
 			<div className="flex flex-col gap-10 max-w-7xl px-12 pt-16 pb-[100px] my-0 mx-auto">
 				<div className="flex gap-3 flex-wrap items-center">
 					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">
-						Products: {data ? data.length : 0}
+						Products: {products ? products.length : 0}
 					</h1>
 					<ul className="flex gap-3 flex-wrap flex-auto">
 						<li className="flex-1">
@@ -91,7 +95,7 @@ export default function ProductsPage() {
 							<SelectField
 								id="select-category"
 								labelName="Category"
-								options={categories}
+								options={categories || []}
 								selectValue={selectedCategory}
 								setSelectValue={setSelectedCategory}
 								multiple
@@ -122,8 +126,8 @@ export default function ProductsPage() {
 				<ul className="flex gap-4 flex-wrap">
 					{/* {isPending && <li>loading...</li>} */}
 					{isError && <li>Error: {error.message}</li>}
-					{data
-						? data.map(product => {
+					{products
+						? products.map(product => {
 								return (
 									<li key={product.id} className="basis-[calc((100%-32px)/3)]">
 										<ProductCard product={product} />
