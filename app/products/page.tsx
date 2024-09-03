@@ -2,28 +2,60 @@
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getProducts, getCategoryList } from "../actions";
-import {ChipsArray} from "@/components/ChipsArray";
-import {SearchBar} from "@/components/SearchBar";
-import {SelectField} from "@/components/SelectField";
-import {ProductCard} from "@/components/Products/ProductCard";
-import {ProductCardSkeleton} from "@/components/Products/ProductCardSkeleton";
+import { ChipsArray } from "@/components/ChipsArray";
+import { SearchBar } from "@/components/SearchBar";
+import { SelectField } from "@/components/SelectField";
+import { ProductCard } from "@/components/Products/ProductCard";
+import { ProductCardSkeleton } from "@/components/Products/ProductCardSkeleton";
+import { createUrl } from "@/utils/createUrl";
 // import axios from "axios";
 // import { Product } from "@/types";
+// import { z } from "zod";
+// import { useQueryParams } from "@/hooks/useQueryParams";
+
+// const queryParamSchema = z.object({
+// 	category: z.array(z.string()),
+// 	tag: z.array(z.string()),
+// 	sortBy: z.string(),
+// 	page: z.coerce.number().default(0).optional(),
+// 	search: z.string().optional(),
+// });
 
 // const categories = ["beauty", "health", "sport", "home"];
-	const tags = ["new", "updated", "old"];
-	const SORT_OPTIONS = [
-		"highest price",
-		"lowest price",
-		"highest rating",
-		"lowest rating",
-	];
+const tags = ["new", "updated", "old"];
+const SORT_OPTIONS = [
+	"highest price",
+	"lowest price",
+	"highest rating",
+	"lowest rating",
+];
 
-export default function ProductsPage() {
-	
+export default function ProductsPage({
+	searchParams,
+}: {
+	searchParams?: { category: string; tag: string; sortBy: string };
+}) {
+	// console.log('searchParams.category :>> ', searchParams?.category);
 
-	const { isPending, isError, data: products, error } = useQuery({
+	// const { queryParams, setQueryParams } = useQueryParams({
+	// 	schema: queryParamSchema,
+	// 	defaultValues: { category: [], tag: [], search: '', page: 1, sortBy: "highest rating" },
+	//   });
+
+	//   console.log('queryParams :>> ', searchParams);
+
+	const router = useRouter();
+	const pathname = usePathname();
+	const newSearchParams = useSearchParams();
+
+	const {
+		isPending,
+		isError,
+		data: products,
+		error,
+	} = useQuery({
 		queryKey: ["products"],
 		queryFn: getProducts,
 	});
@@ -35,26 +67,53 @@ export default function ProductsPage() {
 
 	// const [products, setProducts] = useState<Product[]>([]);
 
-	const [selectedSort, setSelectedSort] = useState<string>("");
-	const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-	const [selectedTag, setSelectedTag] = useState<string[]>([]);
-	const [chipData, setChipData] = useState<string[]>([]);
+	// const [selectedSort, setSelectedSort] = useState<string>("");
+	// const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+	// const [selectedTag, setSelectedTag] = useState<string[]>([]);
+	// const [chipData, setChipData] = useState<string[]>([]);
 
 	const handleDelete = (chipToDelete: string) => () => {
+		const selectedSearchParams = new URLSearchParams(
+			newSearchParams?.toString(),
+		);
+		// console.log('selectedSearchParams - del :>> ', selectedSearchParams);
+		// if (value.length) {
+		// 	selectedSearchParams.set(id, value.toString());
+		// } else {
+		// 	selectedSearchParams.delete(id);
+		// }
+		// const queryString = createUrl(pathname, selectedSearchParams);
+		// router.push(queryString);
 		if (chipToDelete === "all") {
-			setSelectedCategory([]);
-			setSelectedTag([]);
-			return;
+			// setSelectedCategory([]);
+			// setSelectedTag([]);
+			selectedSearchParams.delete("category");
+			selectedSearchParams.delete("tag");
+			// selectedSearchParams.delete("sortBy");
+		} else {
+			const selectedCategories = searchParams?.category?.split(",")
+			const selectedTags = searchParams?.tag?.split(",")
+			const isCategory = selectedCategories?.includes(chipToDelete);
+			// console.log('searchParams?.category :>> ', searchParams?.category);
+			const isTag = (searchParams?.tag || "").includes(chipToDelete);
+			// console.log('searchParams?.tag :>> ', searchParams?.tag);
+			if (isCategory) {
+				selectedSearchParams.set("category", selectedCategories?.filter(chip => chip !== chipToDelete).join(",") || "");
+				console.log(selectedCategories?.length);
+				if (!selectedCategories?.length) {
+					selectedSearchParams.delete("category");
+				}
+			}
+			if (isTag) {
+				selectedSearchParams.set("tag", selectedTags?.filter(chip => chip !== chipToDelete).join(",") || "");
+				if (!selectedTags?.length) {
+					selectedSearchParams.delete("tag");
+				}
+			}
 		}
-		setChipData(() => chipData.filter(chip => chip !== chipToDelete));
-		const isCategory = selectedCategory.includes(chipToDelete);
-		const isTag = selectedTag.includes(chipToDelete);
-		if (isCategory) {
-			setSelectedCategory(prev => prev.filter(item => item !== chipToDelete));
-		}
-		if (isTag) {
-			setSelectedTag(prev => prev.filter(item => item !== chipToDelete));
-		}
+		const queryString = createUrl(pathname, selectedSearchParams);
+		router.push(queryString);
+		// setChipData(() => chipData.filter(chip => chip !== chipToDelete));
 	};
 
 	// useEffect(() => {
@@ -70,9 +129,12 @@ export default function ProductsPage() {
 	// 	fetchProducts();
 	// }, []);
 
-	useEffect(() => {
-		setChipData([...selectedCategory, ...selectedTag]);
-	}, [selectedCategory, selectedTag]);
+	// useEffect(() => {
+	// 	setChipData([
+	// 		...(searchParams?.category?.split(",") || []),
+	// 		...(searchParams?.tag?.split(",") || []),
+	// 	]);
+	// }, [searchParams?.category, searchParams?.tag]);
 
 	return (
 		<main className="min-h-screen">
@@ -87,8 +149,9 @@ export default function ProductsPage() {
 								id="sortBy"
 								options={SORT_OPTIONS}
 								multiple={false}
-								selectValue={selectedSort}
-								setSelectValue={setSelectedSort}
+								selectValue={searchParams?.sortBy || ""}
+								// selectValue={queryParams.sortBy}
+								// setSelectValue={setSelectedSort}
 							/>
 						</li>
 						<li className="flex-1">
@@ -96,8 +159,9 @@ export default function ProductsPage() {
 								id="category"
 								labelName="Category"
 								options={categories || []}
-								selectValue={selectedCategory}
-								setSelectValue={setSelectedCategory}
+								selectValue={searchParams?.category?.split(",") || []}
+								// selectValue={queryParams.category}
+								// setSelectValue={setSelectedCategory}
 								multiple
 							/>
 						</li>
@@ -107,8 +171,9 @@ export default function ProductsPage() {
 								labelName="Tag"
 								options={tags}
 								multiple
-								selectValue={selectedTag}
-								setSelectValue={setSelectedTag}
+								selectValue={searchParams?.tag?.split(",") || []}
+								// selectValue={queryParams.tag}
+								// setSelectValue={setSelectedTag}
 							/>
 						</li>
 					</ul>
@@ -119,8 +184,11 @@ export default function ProductsPage() {
 					{/* <input className="flex-[0_1_calc(20%-9.6px)]" type="search" name="" id="" /> */}
 				</div>
 				<ul className="min-h-8 flex gap-2 flex-wrap items-center">
-					{chipData.length > 0 && (
-						<ChipsArray chipsArray={chipData} handleDelete={handleDelete} />
+					{ (
+						<ChipsArray chipsArray={[
+							...(searchParams?.category?.split(",") || []),
+							...(searchParams?.tag?.split(",") || []),
+						]} handleDelete={handleDelete} />
 					)}
 				</ul>
 				<ul className="flex gap-4 flex-wrap">

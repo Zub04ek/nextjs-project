@@ -8,15 +8,16 @@ import {
 } from "@mui/material";
 import { CheckBox, Check } from "@mui/icons-material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createUrl } from "@/utils";
+import { createUrl } from "@/utils/createUrl";
 import { useCallback } from "react";
+
 
 type CustomSelectProps = SelectProps & {
 	id: string;
 	labelName?: string;
 	options: Array<string>;
 	selectValue: Array<string> | string;
-	setSelectValue: Function;
+	// setSelectValue: Function;
 };
 
 const ITEM_HEIGHT = 48;
@@ -75,41 +76,32 @@ export const SelectField = ({
 	options,
 	multiple,
 	selectValue,
-	setSelectValue,
+	// setSelectValue,
 }: CustomSelectProps) => {
-
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-
-	// const createQueryString = useCallback(
-	// 	(name: string, value: string) => {
-	// 	  const params = new URLSearchParams(searchParams.toString())
-	// 	  params.set(name, value)
-	 
-	// 	  return params.toString()
-	// 	},
-	// 	[searchParams]
-	//   )
 
 	const handleChange = (event: SelectChangeEvent<typeof selectValue>) => {
 		const {
 			target: { value },
 		} = event;
-		
+
 		const selectedSearchParams = new URLSearchParams(searchParams.toString());
-		// console.log('value :>> ', event);
+		
 		if (value.length) {
 			selectedSearchParams.set(id, value.toString());
 		} else {
-			selectedSearchParams.delete(id)
+			selectedSearchParams.delete(id);
 		}
-		
+		// console.log('selectedSearchParams - add :>> ', selectedSearchParams);
 		const queryString = createUrl(pathname, selectedSearchParams);
-		router.push(queryString)
+		router.push(queryString);
+
 		// router.push(`${pathname}?${createQueryString(id, value.toString())}`)
 
-		setSelectValue(typeof value === "string" ? value.split(",") : value);
+		// setSelectValue(typeof value === "string" ? value.split(",") : value);
+		// setSelectValue({id: value });
 	};
 
 	return (
@@ -127,8 +119,6 @@ export const SelectField = ({
 				MenuProps={MenuProps}
 			>
 				{options.map(option => {
-					
-
 					return (
 						<MenuItem
 							key={option}
@@ -148,4 +138,4 @@ export const SelectField = ({
 			</Select>
 		</FormControl>
 	);
-}
+};

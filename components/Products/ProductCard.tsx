@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { Chip, ChipProps } from "@mui/material";
-import { Product } from "@/types";
+import { Product } from "@/utils/types";
 
 type CustomProductProps = ChipProps & {
 	product: Product

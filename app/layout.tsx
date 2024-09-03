@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Open_Sans } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "@/theme";
+import theme from "@/utils/theme";
 import "./globals.css";
 import {TanstackProvider} from "@/providers/TanstackProvider";
 

@@ -1,12 +1,24 @@
-import { Product } from "@/types";
-import axios from "axios"
+import { Product } from "@/utils/types";
+import axios from "axios";
 
 export const getProducts = async () => {
-    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`);
-    return data.products as Product[];
-}
+	try {
+		const { data } = await axios.get(
+			`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`,
+		);
+		return data.products as Product[];
+	} catch (error) {
+		console.log("error :>> ", error);
+	}
+};
 
 export const getCategoryList = async () => {
-    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products/category-list`);
-    return data;
-}
+	try {
+		const { data } = await axios.get(
+			`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products/category-list`,
+		);
+		return data;
+	} catch (error) {
+		console.log("error :>> ", error);
+	}
+};
