@@ -17,7 +17,7 @@ type CustomSelectProps = SelectProps & {
 	labelName?: string;
 	options: Array<string>;
 	selectValue: Array<string> | string;
-	// setSelectValue: Function;
+	// setQueryParams: Function;
 };
 
 const ITEM_HEIGHT = 48;
@@ -76,7 +76,7 @@ export const SelectField = ({
 	options,
 	multiple,
 	selectValue,
-	// setSelectValue,
+	// setQueryParams,
 }: CustomSelectProps) => {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -88,18 +88,15 @@ export const SelectField = ({
 		} = event;
 
 		const selectedSearchParams = new URLSearchParams(searchParams.toString());
-		
 		if (value.length) {
 			selectedSearchParams.set(id, value.toString());
 		} else {
 			selectedSearchParams.delete(id);
 		}
-		// console.log('selectedSearchParams - add :>> ', selectedSearchParams);
 		const queryString = createUrl(pathname, selectedSearchParams);
 		router.push(queryString);
 
 		// router.push(`${pathname}?${createQueryString(id, value.toString())}`)
-
 		// setSelectValue(typeof value === "string" ? value.split(",") : value);
 		// setSelectValue({id: value });
 	};

@@ -12,9 +12,9 @@ export const ChipsArray = ({
 }: CustomChipProps) => {
 	return (
 		<>
-			{chipsArray.map(data => {
+			{chipsArray.map((data, i) => {
 				return (
-					<li key={data}>
+					<li key={i}>
 						<Chip
 							variant="outlined"
 							label={data}

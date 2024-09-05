@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getProducts, getCategoryList } from "../actions";
@@ -16,20 +16,20 @@ import { createUrl } from "@/utils/createUrl";
 // import { useQueryParams } from "@/hooks/useQueryParams";
 
 // const queryParamSchema = z.object({
-// 	category: z.array(z.string()),
-// 	tag: z.array(z.string()),
+// 	category: z.array(z.string()).optional(),
+// 	tag: z.array(z.string()).optional(),
 // 	sortBy: z.string(),
 // 	page: z.coerce.number().default(0).optional(),
 // 	search: z.string().optional(),
 // });
 
 // const categories = ["beauty", "health", "sport", "home"];
-const tags = ["new", "updated", "old"];
+// const tags = ["new", "updated", "old"];
 const SORT_OPTIONS = [
-	"highest price",
-	"lowest price",
 	"highest rating",
 	"lowest rating",
+	"highest price",
+	"lowest price",
 ];
 
 export default function ProductsPage({
@@ -37,18 +37,20 @@ export default function ProductsPage({
 }: {
 	searchParams?: { category: string; tag: string; sortBy: string };
 }) {
-	// console.log('searchParams.category :>> ', searchParams?.category);
-
+	// console.log('searchParam :>> ', searchParams);
 	// const { queryParams, setQueryParams } = useQueryParams({
 	// 	schema: queryParamSchema,
 	// 	defaultValues: { category: [], tag: [], search: '', page: 1, sortBy: "highest rating" },
 	//   });
-
-	//   console.log('queryParams :>> ', searchParams);
+	//   console.log('queryParams :>> ', queryParams);
+	//   console.log('queryParams :>> ', JSON.stringify(queryParams));
 
 	const router = useRouter();
 	const pathname = usePathname();
 	const newSearchParams = useSearchParams();
+
+	const selectedCategories = searchParams?.category?.split(",");
+	const selectedTags = searchParams?.tag?.split(",");
 
 	const {
 		isPending,
@@ -59,16 +61,31 @@ export default function ProductsPage({
 		queryKey: ["products"],
 		queryFn: getProducts,
 	});
-	const { data: categories } = useQuery({
-		queryKey: ["categories"],
-		queryFn: getCategoryList,
-	});
-	// console.log('data :>> ', data);
+	// const { data: categories } = useQuery({
+	// 	queryKey: ["categories"],
+	// 	queryFn: getCategoryList,
+	// });
+
+	const filteredProducts = products?.filter(prod => {
+		const isSelectedCategory = selectedCategories?.includes(prod.category);
+		const isSelectedTag = selectedTags?.filter(t =>
+			prod.tags.includes(t),
+		).length;
+		if (!searchParams?.category && !searchParams?.tag) {
+			return prod;
+		} else if (searchParams?.category && searchParams?.tag) {
+			return isSelectedCategory && isSelectedTag;
+		} else if (searchParams?.category) {
+			return isSelectedCategory;
+		} else if (searchParams?.tag) {
+			return isSelectedTag;
+		}
+	}).sort((a, b) => b.rating - a.rating);
+	// console.log('filteredProducts :>> ', filteredProducts);
 
 	// const [products, setProducts] = useState<Product[]>([]);
-
 	// const [selectedSort, setSelectedSort] = useState<string>("");
-	// const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+	// const [categories, setCategories] = useState<string[]>([]);
 	// const [selectedTag, setSelectedTag] = useState<string[]>([]);
 	// const [chipData, setChipData] = useState<string[]>([]);
 
@@ -91,23 +108,30 @@ export default function ProductsPage({
 			selectedSearchParams.delete("tag");
 			// selectedSearchParams.delete("sortBy");
 		} else {
-			const selectedCategories = searchParams?.category?.split(",")
-			const selectedTags = searchParams?.tag?.split(",")
 			const isCategory = selectedCategories?.includes(chipToDelete);
 			// console.log('searchParams?.category :>> ', searchParams?.category);
-			const isTag = (searchParams?.tag || "").includes(chipToDelete);
+			const isTag = selectedTags?.includes(chipToDelete);
 			// console.log('searchParams?.tag :>> ', searchParams?.tag);
 			if (isCategory) {
-				selectedSearchParams.set("category", selectedCategories?.filter(chip => chip !== chipToDelete).join(",") || "");
-				console.log(selectedCategories?.length);
-				if (!selectedCategories?.length) {
+				if (searchParams?.category?.split(",").length === 1) {
 					selectedSearchParams.delete("category");
+				} else {
+					selectedSearchParams.set(
+						"category",
+						selectedCategories
+							?.filter(chip => chip !== chipToDelete)
+							.join(",") || "",
+					);
 				}
 			}
 			if (isTag) {
-				selectedSearchParams.set("tag", selectedTags?.filter(chip => chip !== chipToDelete).join(",") || "");
-				if (!selectedTags?.length) {
+				if (searchParams?.tag?.split(",").length === 1) {
 					selectedSearchParams.delete("tag");
+				} else {
+					selectedSearchParams.set(
+						"tag",
+						selectedTags?.filter(chip => chip !== chipToDelete).join(",") || "",
+					);
 				}
 			}
 		}
@@ -115,6 +139,39 @@ export default function ProductsPage({
 		router.push(queryString);
 		// setChipData(() => chipData.filter(chip => chip !== chipToDelete));
 	};
+
+	const categories = useMemo(() => {
+		const categories = new Set<string>();
+		if (searchParams?.tag) {
+			filteredProducts?.map(prod => categories.add(prod.category));
+		} else {
+			products?.map(prod => categories.add(prod.category));
+		}
+		return [...categories];
+	}, [filteredProducts, products, searchParams?.tag]);
+
+	const tags = useMemo(() => {
+		const tags = new Set<string>();
+		if (searchParams?.category) {
+			filteredProducts?.map(prod => {
+				prod.tags.map(tag => {
+					tags.add(tag);
+				});
+			});
+		} else {
+			products?.map(prod => {
+				prod.tags.map(tag => {
+					tags.add(tag);
+				});
+			});
+		}
+		return [...tags];
+	}, [filteredProducts, products, searchParams?.category]);
+
+	// useEffect(() => {
+	// 	products?.map(prod => categories.add(prod.category));
+	// 	console.log("categories :>> ", categories);
+	// }, [categories, products]);
 
 	// useEffect(() => {
 	// 	const fetchProducts = async () => {
@@ -141,7 +198,7 @@ export default function ProductsPage({
 			<div className="flex flex-col gap-10 max-w-7xl px-12 pt-16 pb-[100px] my-0 mx-auto">
 				<div className="flex gap-3 flex-wrap items-center">
 					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">
-						Products: {products ? products.length : 0}
+						Products: {filteredProducts ? filteredProducts.length : 0}
 					</h1>
 					<ul className="flex gap-3 flex-wrap flex-auto">
 						<li className="flex-1">
@@ -151,17 +208,17 @@ export default function ProductsPage({
 								multiple={false}
 								selectValue={searchParams?.sortBy || ""}
 								// selectValue={queryParams.sortBy}
-								// setSelectValue={setSelectedSort}
+								// setQueryParams={setQueryParams}
 							/>
 						</li>
 						<li className="flex-1">
 							<SelectField
 								id="category"
 								labelName="Category"
-								options={categories || []}
-								selectValue={searchParams?.category?.split(",") || []}
+								options={categories}
+								selectValue={selectedCategories || []}
 								// selectValue={queryParams.category}
-								// setSelectValue={setSelectedCategory}
+								// setQueryParams={setQueryParams}
 								multiple
 							/>
 						</li>
@@ -171,9 +228,9 @@ export default function ProductsPage({
 								labelName="Tag"
 								options={tags}
 								multiple
-								selectValue={searchParams?.tag?.split(",") || []}
+								selectValue={selectedTags || []}
 								// selectValue={queryParams.tag}
-								// setSelectValue={setSelectedTag}
+								// setQueryParams={setQueryParams}
 							/>
 						</li>
 					</ul>
@@ -184,31 +241,37 @@ export default function ProductsPage({
 					{/* <input className="flex-[0_1_calc(20%-9.6px)]" type="search" name="" id="" /> */}
 				</div>
 				<ul className="min-h-8 flex gap-2 flex-wrap items-center">
-					{ (
-						<ChipsArray chipsArray={[
-							...(searchParams?.category?.split(",") || []),
-							...(searchParams?.tag?.split(",") || []),
-						]} handleDelete={handleDelete} />
-					)}
+					{
+						<ChipsArray
+							chipsArray={[
+								...(selectedCategories || []),
+								...(selectedTags || []),
+							]}
+							handleDelete={handleDelete}
+						/>
+					}
 				</ul>
 				<ul className="flex gap-4 flex-wrap">
-					{/* {isPending && <li>loading...</li>} */}
+					{isPending &&
+						new Array(9).fill(null).map((_, i) => {
+							return (
+								<li key={i} className="basis-[calc((100%-32px)/3)]">
+									<ProductCardSkeleton />
+								</li>
+							);
+						})}
 					{isError && <li>Error: {error.message}</li>}
-					{products
-						? products.map(product => {
-								return (
-									<li key={product.id} className="basis-[calc((100%-32px)/3)]">
-										<ProductCard product={product} />
-									</li>
-								);
-						  })
-						: new Array(9).fill(null).map((_, i) => {
-								return (
-									<li key={i} className="basis-[calc((100%-32px)/3)]">
-										<ProductCardSkeleton />
-									</li>
-								);
-						  })}
+					{filteredProducts?.length ? (
+						filteredProducts.map(product => {
+							return (
+								<li key={product.id} className="basis-[calc((100%-32px)/3)]">
+									<ProductCard product={product} />
+								</li>
+							);
+						})
+					) : (
+						<li>Nothing found</li>
+					)}
 				</ul>
 			</div>
 		</main>

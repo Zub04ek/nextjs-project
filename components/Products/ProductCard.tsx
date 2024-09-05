@@ -11,6 +11,7 @@ export const ProductCard = ({product: {
 	thumbnail,
 	title,
 	brand,
+	category,
 	rating,
 	price,
 	discountPercentage,
@@ -21,6 +22,7 @@ export const ProductCard = ({product: {
 			<div className="py-4 px-6">
 				<h2 className="min-h-16 font-open_sans font-bold text-2xl text-[#1A191F]">{title}</h2>
 				{brand && <p className="text-sm text-[#111111]">{brand}</p>}
+				{category && <p className="text-sm text-[#111111]">{category}</p>}
 				<p>{rating}</p>
 				<span className="mr-1 font-open_sans font-bold text-sm text-[#A8A9AA] line-through">${price}</span>
 				<Chip label={`-${discountPercentage}%`} size="small" sx={{height: "14px", backgroundColor: "#FF3257", color: "#FFFFFF", fontSize: "12px"}} />
