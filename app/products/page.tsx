@@ -3,15 +3,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { getProducts, getCategoryList } from "../actions";
+import { getProducts } from "../actions";
 import { ChipsArray } from "@/components/ChipsArray";
 import { SearchBar } from "@/components/SearchBar";
 import { SelectField } from "@/components/SelectField";
 import { ProductCard } from "@/components/Products/ProductCard";
 import { ProductCardSkeleton } from "@/components/Products/ProductCardSkeleton";
 import { createUrl } from "@/utils/createUrl";
-// import axios from "axios";
-// import { Product } from "@/types";
+import { Product } from "@/utils/types";
+
 // import { z } from "zod";
 // import { useQueryParams } from "@/hooks/useQueryParams";
 
@@ -23,13 +23,17 @@ import { createUrl } from "@/utils/createUrl";
 // 	search: z.string().optional(),
 // });
 
-// const categories = ["beauty", "health", "sport", "home"];
-// const tags = ["new", "updated", "old"];
+// const SORT_OPTIONS = [
+// 	"highest rating",
+// 	"lowest rating",
+// 	"highest price",
+// 	"lowest price",
+// ];
 const SORT_OPTIONS = [
-	"highest rating",
-	"lowest rating",
-	"highest price",
-	"lowest price",
+	"HIGHEST_RATING",
+	"LOWEST_RATING",
+	"HIGHEST_PRICE",
+	"LOWEST_PRICE",
 ];
 
 export default function ProductsPage({
@@ -37,13 +41,10 @@ export default function ProductsPage({
 }: {
 	searchParams?: { category: string; tag: string; sortBy: string };
 }) {
-	// console.log('searchParam :>> ', searchParams);
 	// const { queryParams, setQueryParams } = useQueryParams({
 	// 	schema: queryParamSchema,
 	// 	defaultValues: { category: [], tag: [], search: '', page: 1, sortBy: "highest rating" },
 	//   });
-	//   console.log('queryParams :>> ', queryParams);
-	//   console.log('queryParams :>> ', JSON.stringify(queryParams));
 
 	const router = useRouter();
 	const pathname = usePathname();
@@ -61,12 +62,54 @@ export default function ProductsPage({
 		queryKey: ["products"],
 		queryFn: getProducts,
 	});
-	// const { data: categories } = useQuery({
-	// 	queryKey: ["categories"],
-	// 	queryFn: getCategoryList,
-	// });
 
-	const filteredProducts = products?.filter(prod => {
+	// const [filteredProducts, setFilteredProducts] = useState<Product[]>(visibleProducts);
+	const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
+	const [sortBy, setSortBy] = useState<
+		"HIGHEST_RATING" | "LOWEST_RATING" | "HIGHEST_PRICE" | "LOWEST_PRICE"
+	>("HIGHEST_RATING");
+	const [categories, setCategories] = useState<Set<string>>(new Set());
+	const [tags, setTags] = useState<Set<string>>(new Set());
+
+	useEffect(() => {
+		setVisibleProducts(products || []);
+	}, [products]);
+
+	useEffect(() => {
+		const categories = new Set<string>();
+		const tags = new Set<string>();
+		products?.forEach(prod => categories.add(prod.category));
+		products?.forEach(prod => {
+			prod.tags.forEach(tag => {
+				tags.add(tag);
+			});
+		});
+		setCategories(categories);
+		setTags(tags);
+	}, [products]);
+
+	useEffect(() => {
+		let sortedProducts;
+		switch (sortBy) {
+			case "HIGHEST_RATING":
+				sortedProducts = products?.sort((a, b) => b.rating - a.rating);
+				return;
+			case "LOWEST_RATING":
+				sortedProducts = products?.sort((a, b) => a.rating - b.rating);
+				return;
+			case "HIGHEST_PRICE":
+				sortedProducts = products?.sort((a, b) => b.price - a.price);
+				return;
+			case "LOWEST_PRICE":
+				sortedProducts = products?.sort((a, b) => a.price - b.price);
+				return;
+			default:
+				sortedProducts = products?.sort((a, b) => b.rating - a.rating);
+		}
+		setVisibleProducts(sortedProducts || []);
+	}, [products, sortBy]);
+
+	const filteredProducts = visibleProducts?.filter(prod => {
 		const isSelectedCategory = selectedCategories?.includes(prod.category);
 		const isSelectedTag = selectedTags?.filter(t =>
 			prod.tags.includes(t),
@@ -80,13 +123,11 @@ export default function ProductsPage({
 		} else if (searchParams?.tag) {
 			return isSelectedTag;
 		}
-	}).sort((a, b) => b.rating - a.rating);
+	});
+
 	// console.log('filteredProducts :>> ', filteredProducts);
 
 	// const [products, setProducts] = useState<Product[]>([]);
-	// const [selectedSort, setSelectedSort] = useState<string>("");
-	// const [categories, setCategories] = useState<string[]>([]);
-	// const [selectedTag, setSelectedTag] = useState<string[]>([]);
 	// const [chipData, setChipData] = useState<string[]>([]);
 
 	const handleDelete = (chipToDelete: string) => () => {
@@ -140,38 +181,33 @@ export default function ProductsPage({
 		// setChipData(() => chipData.filter(chip => chip !== chipToDelete));
 	};
 
-	const categories = useMemo(() => {
-		const categories = new Set<string>();
-		if (searchParams?.tag) {
-			filteredProducts?.map(prod => categories.add(prod.category));
-		} else {
-			products?.map(prod => categories.add(prod.category));
-		}
-		return [...categories];
-	}, [filteredProducts, products, searchParams?.tag]);
+	// const categories = useMemo(() => {
+	// 	const categories = new Set<string>();
+	// 	if (searchParams?.tag) {
+	// 		filteredProducts?.map(prod => categories.add(prod.category));
+	// 	} else {
+	// 		products?.map(prod => categories.add(prod.category));
+	// 	}
+	// 	return [...categories];
+	// }, [filteredProducts, products, searchParams?.tag]);
 
-	const tags = useMemo(() => {
-		const tags = new Set<string>();
-		if (searchParams?.category) {
-			filteredProducts?.map(prod => {
-				prod.tags.map(tag => {
-					tags.add(tag);
-				});
-			});
-		} else {
-			products?.map(prod => {
-				prod.tags.map(tag => {
-					tags.add(tag);
-				});
-			});
-		}
-		return [...tags];
-	}, [filteredProducts, products, searchParams?.category]);
-
-	// useEffect(() => {
-	// 	products?.map(prod => categories.add(prod.category));
-	// 	console.log("categories :>> ", categories);
-	// }, [categories, products]);
+	// const tags = useMemo(() => {
+	// 	const tags = new Set<string>();
+	// 	if (searchParams?.category) {
+	// 		filteredProducts?.map(prod => {
+	// 			prod.tags.map(tag => {
+	// 				tags.add(tag);
+	// 			});
+	// 		});
+	// 	} else {
+	// 		products?.map(prod => {
+	// 			prod.tags.map(tag => {
+	// 				tags.add(tag);
+	// 			});
+	// 		});
+	// 	}
+	// 	return [...tags];
+	// }, [filteredProducts, products, searchParams?.category]);
 
 	// useEffect(() => {
 	// 	const fetchProducts = async () => {
@@ -206,16 +242,16 @@ export default function ProductsPage({
 								id="sortBy"
 								options={SORT_OPTIONS}
 								multiple={false}
-								selectValue={searchParams?.sortBy || ""}
-								// selectValue={queryParams.sortBy}
-								// setQueryParams={setQueryParams}
+								// selectValue={searchParams?.sortBy || ""}
+								selectValue={sortBy}
+								setSortBy={setSortBy}
 							/>
 						</li>
 						<li className="flex-1">
 							<SelectField
 								id="category"
 								labelName="Category"
-								options={categories}
+								options={Array.from(categories)}
 								selectValue={selectedCategories || []}
 								// selectValue={queryParams.category}
 								// setQueryParams={setQueryParams}
@@ -226,7 +262,7 @@ export default function ProductsPage({
 							<SelectField
 								id="tag"
 								labelName="Tag"
-								options={tags}
+								options={Array.from(tags)}
 								multiple
 								selectValue={selectedTags || []}
 								// selectValue={queryParams.tag}

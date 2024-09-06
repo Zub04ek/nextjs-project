@@ -11,13 +11,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createUrl } from "@/utils/createUrl";
 import { useCallback } from "react";
 
-
 type CustomSelectProps = SelectProps & {
 	id: string;
 	labelName?: string;
 	options: Array<string>;
 	selectValue: Array<string> | string;
-	// setQueryParams: Function;
+	setSortBy?: Function;
 };
 
 const ITEM_HEIGHT = 48;
@@ -76,7 +75,7 @@ export const SelectField = ({
 	options,
 	multiple,
 	selectValue,
-	// setQueryParams,
+	setSortBy,
 }: CustomSelectProps) => {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -86,6 +85,10 @@ export const SelectField = ({
 		const {
 			target: { value },
 		} = event;
+
+		if (id === "sortBy") {
+			setSortBy!(value);	
+		}
 
 		const selectedSearchParams = new URLSearchParams(searchParams.toString());
 		if (value.length) {
