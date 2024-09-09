@@ -9,15 +9,8 @@ import {
 import { CheckBox, Check } from "@mui/icons-material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createUrl } from "@/utils/createUrl";
-import { useCallback } from "react";
-
-type CustomSelectProps = SelectProps & {
-	id: string;
-	labelName?: string;
-	options: Array<string>;
-	selectValue: Array<string> | string;
-	setSortBy?: Function;
-};
+import { SelectFieldProps } from "@/utils/types";
+import { useMemo } from "react";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 12;
@@ -69,26 +62,25 @@ const CheckboxStyles = (id: string) => [
 	},
 ];
 
-export const SelectField = ({
-	id,
-	labelName,
-	options,
-	multiple,
-	selectValue,
-	setSortBy,
-}: CustomSelectProps) => {
+export const SelectField = (props: SelectFieldProps & SelectProps) => {
+	const { id, labelName, options, selectValue, setValue, multiple } = props;
+
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+
+	const transformedValue = (value: string | Array<string>) => {
+		return id === "sortBy" && typeof value === "string" ? value.toLowerCase().replace("_", " ") : value;
+	};
 
 	const handleChange = (event: SelectChangeEvent<typeof selectValue>) => {
 		const {
 			target: { value },
 		} = event;
 
-		if (id === "sortBy") {
-			setSortBy!(value);	
-		}
+		// if (id === "sortBy" && typeof value === "string") {
+		// 	setSortBy!(value);
+		// }
 
 		const selectedSearchParams = new URLSearchParams(searchParams.toString());
 		if (value.length) {
@@ -100,7 +92,7 @@ export const SelectField = ({
 		router.push(queryString);
 
 		// router.push(`${pathname}?${createQueryString(id, value.toString())}`)
-		// setSelectValue(typeof value === "string" ? value.split(",") : value);
+		setValue(typeof value === "string" ? value.split(",") : value);
 		// setSelectValue({id: value });
 	};
 
@@ -109,7 +101,7 @@ export const SelectField = ({
 			<Select
 				id={id}
 				multiple={multiple}
-				value={selectValue}
+				value={transformedValue(selectValue)}
 				onChange={handleChange}
 				displayEmpty={true}
 				// renderValue={value => value === "" && labelName ? labelName : value}
@@ -131,7 +123,7 @@ export const SelectField = ({
 								checked={selectValue.indexOf(option) > -1}
 								checkedIcon={id === "sort" ? <Check /> : <CheckBox />}
 							/>
-							{option}
+							{transformedValue(option)}
 						</MenuItem>
 					);
 				})}

@@ -26,10 +26,21 @@
 // 	);
 // }
 
-import { Paper, InputBase, IconButton } from "@mui/material";
+import { Paper, InputBase, InputBaseProps, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { SearchBarProps } from "@/utils/types";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 
-export const SearchBar = () => {
+export const SearchBar = ({onChange}: SearchBarProps ) => {
+	const [search, setSearch] = useState<string>("");
+	const debouncedSearch = useDebounce(search);
+
+	useEffect(() => {
+		onChange(debouncedSearch)
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [debouncedSearch])
+	
 	return (
 		<Paper
 			component="form"
@@ -51,6 +62,8 @@ export const SearchBar = () => {
 			<InputBase
 				sx={{ flex: 1, fontWeight: 500 }}
 				placeholder="Search"
+				value={search}
+				onChange={e => setSearch(e.target.value)}
 				inputProps={{ "aria-label": "search" }}
 			/>
 		</Paper>

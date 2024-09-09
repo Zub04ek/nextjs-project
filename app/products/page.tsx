@@ -5,12 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getProducts } from "../actions";
 import { ChipsArray } from "@/components/ChipsArray";
-import { SearchBar } from "@/components/SearchBar";
-import { SelectField } from "@/components/SelectField";
-import { ProductCard } from "@/components/Products/ProductCard";
-import { ProductCardSkeleton } from "@/components/Products/ProductCardSkeleton";
+// import { SearchBar } from "@/components/SearchBar";
+// import { SelectField } from "@/components/SelectField";
+// import { ProductCard } from "@/components/ProductCard/ProductCard";
+// import { ProductCardSkeleton } from "@/components/ProductCard/ProductCardSkeleton";
 import { createUrl } from "@/utils/createUrl";
-import { Product } from "@/utils/types";
+import { Product, ProductFilters } from "@/utils/types";
+import { ProductList } from "@/components/ProductList/ProductList";
+import { ProductListFilters } from "@/components/ProductList/ProductListFilters";
 
 // import { z } from "zod";
 // import { useQueryParams } from "@/hooks/useQueryParams";
@@ -29,12 +31,12 @@ import { Product } from "@/utils/types";
 // 	"highest price",
 // 	"lowest price",
 // ];
-const SORT_OPTIONS = [
-	"HIGHEST_RATING",
-	"LOWEST_RATING",
-	"HIGHEST_PRICE",
-	"LOWEST_PRICE",
-];
+// const SORT_OPTIONS = [
+// 	"HIGHEST_RATING",
+// 	"LOWEST_RATING",
+// 	"HIGHEST_PRICE",
+// 	"LOWEST_PRICE",
+// ];
 
 export default function ProductsPage({
 	searchParams,
@@ -50,8 +52,14 @@ export default function ProductsPage({
 	const pathname = usePathname();
 	const newSearchParams = useSearchParams();
 
-	const selectedCategories = searchParams?.category?.split(",");
-	const selectedTags = searchParams?.tag?.split(",");
+	const selectedCategories = searchParams?.category?.split(",") || [];
+	const selectedTags = searchParams?.tag?.split(",") || [];
+
+	const [search, setSearch] = useState<ProductFilters["search"]>();
+	const [sortBy, setSortBy] =
+		useState<ProductFilters["sortBy"]>("HIGHEST_RATING");
+	const [category, setCategory] = useState<ProductFilters["category"]>();
+	const [tag, setTag] = useState<ProductFilters["tag"]>();
 
 	const {
 		isPending,
@@ -59,34 +67,39 @@ export default function ProductsPage({
 		data: products,
 		error,
 	} = useQuery({
-		queryKey: ["products"],
-		queryFn: getProducts,
+		queryKey: ["products", {sortBy, category, tag, search}],
+		queryFn: () => getProducts({sortBy, category, tag, search}),
 	});
 
-	// const [filteredProducts, setFilteredProducts] = useState<Product[]>(visibleProducts);
 	const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
-	const [sortBy, setSortBy] = useState<
-		"HIGHEST_RATING" | "LOWEST_RATING" | "HIGHEST_PRICE" | "LOWEST_PRICE"
-	>("HIGHEST_RATING");
-	const [categories, setCategories] = useState<Set<string>>(new Set());
-	const [tags, setTags] = useState<Set<string>>(new Set());
+	// const [filteredProducts, setFilteredProducts] = useState<Product[]>(visibleProducts);
+	// const [sortBy, setSortBy] = useState<
+	// 	"HIGHEST_RATING" | "LOWEST_RATING" | "HIGHEST_PRICE" | "LOWEST_PRICE"
+	// >("HIGHEST_RATING");
+	// const [categories, setCategories] = useState<Set<string>>(new Set());
+	// const [tags, setTags] = useState<Set<string>>(new Set());
+	// const [search, setSearch] = useState<string>("");
 
 	useEffect(() => {
-		setVisibleProducts(products || []);
+		if (products) {
+			setVisibleProducts(products);
+		}
 	}, [products]);
 
-	useEffect(() => {
-		const categories = new Set<string>();
-		const tags = new Set<string>();
-		products?.forEach(prod => categories.add(prod.category));
-		products?.forEach(prod => {
-			prod.tags.forEach(tag => {
-				tags.add(tag);
-			});
-		});
-		setCategories(categories);
-		setTags(tags);
-	}, [products]);
+	// useEffect(() => {
+	// 	const categories = new Set<string>();
+	// 	const allTags = new Set<string>();
+	// 	if (products) {
+	// 		products.forEach(({ category, tags }) => {
+	// 			categories.add(category);
+	// 			tags.forEach(tag => {
+	// 				allTags.add(tag);
+	// 			});
+	// 		});
+	// 	}
+	// 	setCategories(categories);
+	// 	setTags(allTags);
+	// }, [products]);
 
 	useEffect(() => {
 		let sortedProducts;
@@ -108,6 +121,15 @@ export default function ProductsPage({
 		}
 		setVisibleProducts(sortedProducts || []);
 	}, [products, sortBy]);
+
+	useEffect(() => {
+		if (products) {
+			const filteredProducts = products?.filter(product => {
+				return product.title.toLowerCase().includes(search!.toLowerCase());
+			});
+			setVisibleProducts(filteredProducts);
+		}
+	}, [products, search]);
 
 	const filteredProducts = visibleProducts?.filter(prod => {
 		const isSelectedCategory = selectedCategories?.includes(prod.category);
@@ -236,7 +258,13 @@ export default function ProductsPage({
 					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">
 						Products: {filteredProducts ? filteredProducts.length : 0}
 					</h1>
-					<ul className="flex gap-3 flex-wrap flex-auto">
+					<ProductListFilters products={products || []} onChange={(filters) => {
+						setSortBy(filters.sortBy);
+						setCategory(filters.category);
+						setTag(filters.tag);
+						setSearch(filters.search)
+					}} />
+					{/* <ul className="flex gap-3 flex-wrap flex-auto">
 						<li className="flex-1">
 							<SelectField
 								id="sortBy"
@@ -252,7 +280,7 @@ export default function ProductsPage({
 								id="category"
 								labelName="Category"
 								options={Array.from(categories)}
-								selectValue={selectedCategories || []}
+								selectValue={selectedCategories}
 								// selectValue={queryParams.category}
 								// setQueryParams={setQueryParams}
 								multiple
@@ -264,30 +292,28 @@ export default function ProductsPage({
 								labelName="Tag"
 								options={Array.from(tags)}
 								multiple
-								selectValue={selectedTags || []}
+								selectValue={selectedTags}
 								// selectValue={queryParams.tag}
 								// setQueryParams={setQueryParams}
 							/>
 						</li>
 					</ul>
 					<div className="flex-[0_1_calc(20%-9.6px)]">
-						<SearchBar />
-					</div>
+						<SearchBar onChange={setSearch} />
+					</div> */}
 
 					{/* <input className="flex-[0_1_calc(20%-9.6px)]" type="search" name="" id="" /> */}
 				</div>
 				<ul className="min-h-8 flex gap-2 flex-wrap items-center">
 					{
 						<ChipsArray
-							chipsArray={[
-								...(selectedCategories || []),
-								...(selectedTags || []),
-							]}
+							chipsArray={[...selectedCategories, ...selectedTags]}
 							handleDelete={handleDelete}
 						/>
 					}
 				</ul>
-				<ul className="flex gap-4 flex-wrap">
+				<ProductList products={filteredProducts} isPending={isPending} isError={isError} error={error} />
+				{/* <ul className="flex gap-4 flex-wrap">
 					{isPending &&
 						new Array(9).fill(null).map((_, i) => {
 							return (
@@ -308,7 +334,7 @@ export default function ProductsPage({
 					) : (
 						<li>Nothing found</li>
 					)}
-				</ul>
+				</ul> */}
 			</div>
 		</main>
 	);
