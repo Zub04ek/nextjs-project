@@ -34,5 +34,5 @@ export type ProductFilters = {
 	sortBy: "HIGHEST_RATING" | "LOWEST_RATING" | "HIGHEST_PRICE" | "LOWEST_PRICE";
 	category?: Array<string>;
 	tag?: Array<string>;
-	search: string;
+	search?: string;
   };

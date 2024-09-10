@@ -1,12 +1,15 @@
 import { useDebounce } from "@/hooks/useDebounce";
-import { Product, ProductFilters } from "@/utils/types";
+import { ProductFilters } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import { SelectField } from "@/components/SelectField";
 
 type ProductListFiltersProps = {
 	onChange: (filters: ProductFilters) => void;
-    products: Product[];
+	// handleDelete: Function;
+	// handleDelete: (category: Array<string>, tag: Array<string>) => void;
+    categories: Set<string>;
+	tags: Set<string>;
 };
 
 const SORT_OPTIONS = [
@@ -16,7 +19,7 @@ const SORT_OPTIONS = [
 	"LOWEST_PRICE",
 ];
 
-export const ProductListFilters = ({ onChange, products }: ProductListFiltersProps) => {
+export const ProductListFilters = ({ onChange, categories, tags }: ProductListFiltersProps) => {
 	const [search, setSearch] = useState<ProductFilters["search"]>("");
 	const debouncedSearch = useDebounce(search);
 
@@ -24,24 +27,6 @@ export const ProductListFilters = ({ onChange, products }: ProductListFiltersPro
 		useState<ProductFilters["sortBy"]>("HIGHEST_RATING");
 	const [category, setCategory] = useState<ProductFilters["category"]>();
 	const [tag, setTag] = useState<ProductFilters["tag"]>();
-
-	const [categories, setCategories] = useState<Set<string>>(new Set());
-	const [tags, setTags] = useState<Set<string>>(new Set());
-
-    useEffect(() => {
-		const categories = new Set<string>();
-		const allTags = new Set<string>();
-		if (products) {
-			products.forEach(({ category, tags }) => {
-				categories.add(category);
-				tags.forEach(tag => {
-					allTags.add(tag);
-				});
-			});
-		}
-		setCategories(categories);
-		setTags(allTags);
-	}, [products]);
 
 	useEffect(() => {
 		onChange({ sortBy, category, tag, search: debouncedSearch });

@@ -13,6 +13,7 @@ import { createUrl } from "@/utils/createUrl";
 import { Product, ProductFilters } from "@/utils/types";
 import { ProductList } from "@/components/ProductList/ProductList";
 import { ProductListFilters } from "@/components/ProductList/ProductListFilters";
+import { string } from "zod";
 
 // import { z } from "zod";
 // import { useQueryParams } from "@/hooks/useQueryParams";
@@ -67,8 +68,8 @@ export default function ProductsPage({
 		data: products,
 		error,
 	} = useQuery({
-		queryKey: ["products", {sortBy, category, tag, search}],
-		queryFn: () => getProducts({sortBy, category, tag, search}),
+		queryKey: ["products"],
+		queryFn: getProducts,
 	});
 
 	const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
@@ -76,8 +77,8 @@ export default function ProductsPage({
 	// const [sortBy, setSortBy] = useState<
 	// 	"HIGHEST_RATING" | "LOWEST_RATING" | "HIGHEST_PRICE" | "LOWEST_PRICE"
 	// >("HIGHEST_RATING");
-	// const [categories, setCategories] = useState<Set<string>>(new Set());
-	// const [tags, setTags] = useState<Set<string>>(new Set());
+	const [categories, setCategories] = useState<Set<string>>(new Set());
+	const [tags, setTags] = useState<Set<string>>(new Set());
 	// const [search, setSearch] = useState<string>("");
 
 	useEffect(() => {
@@ -86,50 +87,62 @@ export default function ProductsPage({
 		}
 	}, [products]);
 
-	// useEffect(() => {
-	// 	const categories = new Set<string>();
-	// 	const allTags = new Set<string>();
-	// 	if (products) {
-	// 		products.forEach(({ category, tags }) => {
-	// 			categories.add(category);
-	// 			tags.forEach(tag => {
-	// 				allTags.add(tag);
-	// 			});
-	// 		});
-	// 	}
-	// 	setCategories(categories);
-	// 	setTags(allTags);
-	// }, [products]);
-
 	useEffect(() => {
-		let sortedProducts;
-		switch (sortBy) {
-			case "HIGHEST_RATING":
-				sortedProducts = products?.sort((a, b) => b.rating - a.rating);
-				return;
-			case "LOWEST_RATING":
-				sortedProducts = products?.sort((a, b) => a.rating - b.rating);
-				return;
-			case "HIGHEST_PRICE":
-				sortedProducts = products?.sort((a, b) => b.price - a.price);
-				return;
-			case "LOWEST_PRICE":
-				sortedProducts = products?.sort((a, b) => a.price - b.price);
-				return;
-			default:
-				sortedProducts = products?.sort((a, b) => b.rating - a.rating);
+		const categories = new Set<string>();
+		const allTags = new Set<string>();
+		if (products) {
+			products.forEach(({ category, tags }) => {
+				categories.add(category);
+				tags.forEach(tag => {
+					allTags.add(tag);
+				});
+			});
 		}
-		setVisibleProducts(sortedProducts || []);
-	}, [products, sortBy]);
+		setCategories(categories);
+		setTags(allTags);
+	}, [products]);
+
+	// useEffect(() => {
+
+	// 	setVisibleProducts(sortedProducts || []);
+	// }, [products, sortBy]);
 
 	useEffect(() => {
 		if (products) {
-			const filteredProducts = products?.filter(product => {
-				return product.title.toLowerCase().includes(search!.toLowerCase());
-			});
+			let sortedProducts;
+			switch (sortBy) {
+				case "HIGHEST_RATING":
+					sortedProducts = products?.sort((a, b) => b.rating - a.rating);
+					break;
+				case "LOWEST_RATING":
+					sortedProducts = products?.sort((a, b) => a.rating - b.rating);
+					break;
+				case "HIGHEST_PRICE":
+					sortedProducts = products?.sort((a, b) => b.price - a.price);
+					break;
+				case "LOWEST_PRICE":
+					sortedProducts = products?.sort((a, b) => a.price - b.price);
+					break;
+				default:
+					sortedProducts = products?.sort((a, b) => b.rating - a.rating);
+			}
+			let filteredProducts = sortedProducts;
+			if (search) {
+				filteredProducts = sortedProducts?.filter(product => {
+					for (let prop in product) {
+						const isInclude = product[prop as keyof Product]
+							.toString()
+							.toLowerCase()
+							.includes(search!.toLowerCase());
+						if (isInclude) {
+							return product;
+						}
+					}
+				});
+			}
 			setVisibleProducts(filteredProducts);
 		}
-	}, [products, search]);
+	}, [products, search, sortBy]);
 
 	const filteredProducts = visibleProducts?.filter(prod => {
 		const isSelectedCategory = selectedCategories?.includes(prod.category);
@@ -165,8 +178,8 @@ export default function ProductsPage({
 		// const queryString = createUrl(pathname, selectedSearchParams);
 		// router.push(queryString);
 		if (chipToDelete === "all") {
-			// setSelectedCategory([]);
-			// setSelectedTag([]);
+			setCategory([]);
+			setTag([]);
 			selectedSearchParams.delete("category");
 			selectedSearchParams.delete("tag");
 			// selectedSearchParams.delete("sortBy");
@@ -200,6 +213,7 @@ export default function ProductsPage({
 		}
 		const queryString = createUrl(pathname, selectedSearchParams);
 		router.push(queryString);
+
 		// setChipData(() => chipData.filter(chip => chip !== chipToDelete));
 	};
 
@@ -258,83 +272,27 @@ export default function ProductsPage({
 					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">
 						Products: {filteredProducts ? filteredProducts.length : 0}
 					</h1>
-					<ProductListFilters products={products || []} onChange={(filters) => {
-						setSortBy(filters.sortBy);
-						setCategory(filters.category);
-						setTag(filters.tag);
-						setSearch(filters.search)
-					}} />
-					{/* <ul className="flex gap-3 flex-wrap flex-auto">
-						<li className="flex-1">
-							<SelectField
-								id="sortBy"
-								options={SORT_OPTIONS}
-								multiple={false}
-								// selectValue={searchParams?.sortBy || ""}
-								selectValue={sortBy}
-								setSortBy={setSortBy}
-							/>
-						</li>
-						<li className="flex-1">
-							<SelectField
-								id="category"
-								labelName="Category"
-								options={Array.from(categories)}
-								selectValue={selectedCategories}
-								// selectValue={queryParams.category}
-								// setQueryParams={setQueryParams}
-								multiple
-							/>
-						</li>
-						<li className="flex-1">
-							<SelectField
-								id="tag"
-								labelName="Tag"
-								options={Array.from(tags)}
-								multiple
-								selectValue={selectedTags}
-								// selectValue={queryParams.tag}
-								// setQueryParams={setQueryParams}
-							/>
-						</li>
-					</ul>
-					<div className="flex-[0_1_calc(20%-9.6px)]">
-						<SearchBar onChange={setSearch} />
-					</div> */}
-
-					{/* <input className="flex-[0_1_calc(20%-9.6px)]" type="search" name="" id="" /> */}
+					<ProductListFilters
+						categories={categories}
+						tags={tags}
+						onChange={filters => {
+							setSortBy(filters.sortBy);
+							setCategory(filters.category);
+							setTag(filters.tag);
+							setSearch(filters.search);
+						}}
+					/>
 				</div>
-				<ul className="min-h-8 flex gap-2 flex-wrap items-center">
-					{
-						<ChipsArray
-							chipsArray={[...selectedCategories, ...selectedTags]}
-							handleDelete={handleDelete}
-						/>
-					}
-				</ul>
-				<ProductList products={filteredProducts} isPending={isPending} isError={isError} error={error} />
-				{/* <ul className="flex gap-4 flex-wrap">
-					{isPending &&
-						new Array(9).fill(null).map((_, i) => {
-							return (
-								<li key={i} className="basis-[calc((100%-32px)/3)]">
-									<ProductCardSkeleton />
-								</li>
-							);
-						})}
-					{isError && <li>Error: {error.message}</li>}
-					{filteredProducts?.length ? (
-						filteredProducts.map(product => {
-							return (
-								<li key={product.id} className="basis-[calc((100%-32px)/3)]">
-									<ProductCard product={product} />
-								</li>
-							);
-						})
-					) : (
-						<li>Nothing found</li>
-					)}
-				</ul> */}
+				<ChipsArray
+					chipsArray={[...selectedCategories, ...selectedTags]}
+					handleDelete={handleDelete}
+				/>
+				<ProductList
+					products={filteredProducts}
+					isPending={isPending}
+					isError={isError}
+					error={error}
+				/>
 			</div>
 		</main>
 	);

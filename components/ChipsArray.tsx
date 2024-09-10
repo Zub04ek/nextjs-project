@@ -6,12 +6,9 @@ type CustomChipProps = ChipProps & {
 	handleDelete: Function;
 };
 
-export const ChipsArray = ({
-	chipsArray,
-	handleDelete,
-}: CustomChipProps) => {
+export const ChipsArray = ({ chipsArray, handleDelete }: CustomChipProps) => {
 	return (
-		<>
+		<ul className="min-h-8 flex gap-2 flex-wrap items-center">
 			{chipsArray.map((data, i) => {
 				return (
 					<li key={i}>
@@ -20,13 +17,13 @@ export const ChipsArray = ({
 							label={data}
 							onDelete={handleDelete(data)}
 							deleteIcon={<CloseOutlined />}
-							sx={{borderColor: "#CCD5E0"}}
+							sx={{ borderColor: "#CCD5E0" }}
 						/>
 					</li>
 				);
 			})}
-			<li key="all">
-				{chipsArray.length > 0 && (
+			{chipsArray.length > 0 && (
+				<li key="all">
 					<Chip
 						variant="outlined"
 						label="Clear all"
@@ -34,8 +31,8 @@ export const ChipsArray = ({
 						onDelete={handleDelete("all")}
 						deleteIcon={<CloseOutlined />}
 					/>
-				)}
-			</li>
-		</>
+				</li>
+			)}
+		</ul>
 	);
-}
+};

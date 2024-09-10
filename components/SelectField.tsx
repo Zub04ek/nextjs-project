@@ -78,10 +78,6 @@ export const SelectField = (props: SelectFieldProps & SelectProps) => {
 			target: { value },
 		} = event;
 
-		// if (id === "sortBy" && typeof value === "string") {
-		// 	setSortBy!(value);
-		// }
-
 		const selectedSearchParams = new URLSearchParams(searchParams.toString());
 		if (value.length) {
 			selectedSearchParams.set(id, value.toString());
@@ -92,7 +88,11 @@ export const SelectField = (props: SelectFieldProps & SelectProps) => {
 		router.push(queryString);
 
 		// router.push(`${pathname}?${createQueryString(id, value.toString())}`)
-		setValue(typeof value === "string" ? value.split(",") : value);
+		if (id === "sortBy") {
+			setValue(value);
+		} else {
+			setValue(typeof value === "string" ? value.split(",") : value);
+		}
 		// setSelectValue({id: value });
 	};
 
