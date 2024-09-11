@@ -23,7 +23,7 @@ export const ChipsArray = ({ chipsArray, handleDelete }: CustomChipProps) => {
 				);
 			})}
 			{chipsArray.length > 0 && (
-				<li key="all">
+				<li>
 					<Chip
 						variant="outlined"
 						label="Clear all"

@@ -1,10 +1,10 @@
 import { useDebounce } from "@/hooks/useDebounce";
 import { ProductFilters } from "@/utils/types";
 import { useEffect, useState } from "react";
-import { SearchBar } from "@/components/SearchBar";
-import { SelectField } from "@/components/SelectField";
+import { SelectField } from "../SelectField";
+import { SearchBar } from "../SearchBar";
 
-type ProductListFiltersProps = {
+interface ProductListFiltersProps {
 	onChange: (filters: ProductFilters) => void;
 	// handleDelete: Function;
 	// handleDelete: (category: Array<string>, tag: Array<string>) => void;
@@ -29,7 +29,7 @@ export const ProductListFilters = ({ onChange, categories, tags }: ProductListFi
 	const [tag, setTag] = useState<ProductFilters["tag"]>();
 
 	useEffect(() => {
-		onChange({ sortBy, category, tag, search: debouncedSearch });
+		onChange({ sortBy, category: category || [], tag: tag || [], search: debouncedSearch });
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sortBy, category, tag, debouncedSearch]);
 

@@ -4,16 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getProducts } from "../actions";
-import { ChipsArray } from "@/components/ChipsArray";
-// import { SearchBar } from "@/components/SearchBar";
-// import { SelectField } from "@/components/SelectField";
-// import { ProductCard } from "@/components/ProductCard/ProductCard";
-// import { ProductCardSkeleton } from "@/components/ProductCard/ProductCardSkeleton";
 import { createUrl } from "@/utils/createUrl";
 import { Product, ProductFilters } from "@/utils/types";
-import { ProductList } from "@/components/ProductList/ProductList";
-import { ProductListFilters } from "@/components/ProductList/ProductListFilters";
-import { string } from "zod";
+import { ChipsArray } from "@/components/ChipsArray";
+import { ProductList, ProductListFilters } from "@/components/ProductList";
 
 // import { z } from "zod";
 // import { useQueryParams } from "@/hooks/useQueryParams";
@@ -56,11 +50,11 @@ export default function ProductsPage({
 	const selectedCategories = searchParams?.category?.split(",") || [];
 	const selectedTags = searchParams?.tag?.split(",") || [];
 
-	const [search, setSearch] = useState<ProductFilters["search"]>();
+	const [search, setSearch] = useState<ProductFilters["search"]>("");
 	const [sortBy, setSortBy] =
 		useState<ProductFilters["sortBy"]>("HIGHEST_RATING");
-	const [category, setCategory] = useState<ProductFilters["category"]>();
-	const [tag, setTag] = useState<ProductFilters["tag"]>();
+	const [category, setCategory] = useState<ProductFilters["category"]>([]);
+	const [tag, setTag] = useState<ProductFilters["tag"]>([]);
 
 	const {
 		isPending,
@@ -88,77 +82,113 @@ export default function ProductsPage({
 	}, [products]);
 
 	useEffect(() => {
-		const categories = new Set<string>();
-		const allTags = new Set<string>();
 		if (products) {
+			const categories = new Set<string>();
+			const allTags = new Set<string>();
+
 			products.forEach(({ category, tags }) => {
 				categories.add(category);
 				tags.forEach(tag => {
 					allTags.add(tag);
 				});
 			});
+
+			setCategories(categories);
+			setTags(allTags);
 		}
-		setCategories(categories);
-		setTags(allTags);
 	}, [products]);
 
-	// useEffect(() => {
-
-	// 	setVisibleProducts(sortedProducts || []);
-	// }, [products, sortBy]);
-
 	useEffect(() => {
-		if (products) {
-			let sortedProducts;
+		// if (visibleProducts) {
+		const sortedProducts = visibleProducts.sort((a, b) => {
 			switch (sortBy) {
 				case "HIGHEST_RATING":
-					sortedProducts = products?.sort((a, b) => b.rating - a.rating);
-					break;
+					return b.rating - a.rating;
 				case "LOWEST_RATING":
-					sortedProducts = products?.sort((a, b) => a.rating - b.rating);
-					break;
+					return a.rating - b.rating;
 				case "HIGHEST_PRICE":
-					sortedProducts = products?.sort((a, b) => b.price - a.price);
-					break;
+					return b.price - a.price;
 				case "LOWEST_PRICE":
-					sortedProducts = products?.sort((a, b) => a.price - b.price);
-					break;
+					return a.price - b.price;
 				default:
-					sortedProducts = products?.sort((a, b) => b.rating - a.rating);
+					return b.rating - a.rating;
 			}
-			let filteredProducts = sortedProducts;
-			if (search) {
-				filteredProducts = sortedProducts?.filter(product => {
-					for (let prop in product) {
-						const isInclude = product[prop as keyof Product]
-							.toString()
-							.toLowerCase()
-							.includes(search!.toLowerCase());
-						if (isInclude) {
-							return product;
-						}
-					}
-				});
-			}
-			setVisibleProducts(filteredProducts);
-		}
-	}, [products, search, sortBy]);
+		});
 
-	const filteredProducts = visibleProducts?.filter(prod => {
-		const isSelectedCategory = selectedCategories?.includes(prod.category);
-		const isSelectedTag = selectedTags?.filter(t =>
-			prod.tags.includes(t),
-		).length;
-		if (!searchParams?.category && !searchParams?.tag) {
-			return prod;
-		} else if (searchParams?.category && searchParams?.tag) {
-			return isSelectedCategory && isSelectedTag;
-		} else if (searchParams?.category) {
-			return isSelectedCategory;
-		} else if (searchParams?.tag) {
-			return isSelectedTag;
-		}
-	});
+		console.log('sortedProducts :>> ', sortedProducts);
+
+		// switch (sortBy) {
+		// 	case "HIGHEST_RATING":
+		// 		sortedProducts = visibleProducts.sort((a, b) => b.rating - a.rating);
+		// 		break;
+		// 	case "LOWEST_RATING":
+		// 		sortedProducts = visibleProducts.sort((a, b) => a.rating - b.rating);
+		// 		break;
+		// 	case "HIGHEST_PRICE":
+		// 		sortedProducts = visibleProducts.sort((a, b) => b.price - a.price);
+		// 		break;
+		// 	case "LOWEST_PRICE":
+		// 		sortedProducts = visibleProducts.sort((a, b) => a.price - b.price);
+		// 		break;
+		// 	default:
+		// 		sortedProducts = visibleProducts.sort((a, b) => b.rating - a.rating);
+		// }
+
+		// if (search) {
+		const filteredProducts = sortedProducts.filter(product => {
+			const isFoundFromSearch = [
+				product.title,
+				product.brand,
+				product.category,
+				product.tags,
+				product.price,
+			].some(item => {
+				if (item) {
+					return item.toString().toLowerCase().includes(search.toLowerCase());
+				}
+			});
+
+			const isSelectedCategory =
+				category?.length === 0 || category?.includes(product.category);
+			const isSelectedTag =
+				tag.length === 0 || tag.filter(t => product.tags.includes(t));
+
+			// const returnValue =
+			// 	isFoundFromSearch && isSelectedCategory && isSelectedTag;
+			// console.log("returnValue :>> ", returnValue);
+
+			return isFoundFromSearch && isSelectedCategory && isSelectedTag;
+			// for (let prop in product) {
+			// 	const isInclude = product[prop as keyof Product]
+			// 		.toString()
+			// 		.toLowerCase()
+			// 		.includes(search!.toLowerCase());
+			// 	if (isInclude) {
+			// 		return product;
+			// 	}
+			// }
+		});
+		// console.log("filteredProducts :>> ", filteredProducts);
+		// }
+		setVisibleProducts(filteredProducts);
+		// }
+	}, [sortBy, category, search, tag]);
+
+	// const filteredProducts = visibleProducts?.filter(prod => {
+	// 	const isSelectedCategory = selectedCategories?.includes(prod.category);
+	// 	const isSelectedTag = selectedTags?.filter(t =>
+	// 		prod.tags.includes(t),
+	// 	).length;
+	// 	if (!searchParams?.category && !searchParams?.tag) {
+	// 		return prod;
+	// 	} else if (searchParams?.category && searchParams?.tag) {
+	// 		return isSelectedCategory && isSelectedTag;
+	// 	} else if (searchParams?.category) {
+	// 		return isSelectedCategory;
+	// 	} else if (searchParams?.tag) {
+	// 		return isSelectedTag;
+	// 	}
+	// });
 
 	// console.log('filteredProducts :>> ', filteredProducts);
 
@@ -270,7 +300,7 @@ export default function ProductsPage({
 			<div className="flex flex-col gap-10 max-w-7xl px-12 pt-16 pb-[100px] my-0 mx-auto">
 				<div className="flex gap-3 flex-wrap items-center">
 					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">
-						Products: {filteredProducts ? filteredProducts.length : 0}
+						Products: {visibleProducts ? visibleProducts.length : 0}
 					</h1>
 					<ProductListFilters
 						categories={categories}
@@ -288,7 +318,7 @@ export default function ProductsPage({
 					handleDelete={handleDelete}
 				/>
 				<ProductList
-					products={filteredProducts}
+					products={visibleProducts}
 					isPending={isPending}
 					isError={isError}
 					error={error}

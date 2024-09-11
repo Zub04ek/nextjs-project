@@ -1,8 +1,7 @@
 import { Product } from "@/utils/types";
-import { ProductCard } from "@/components/ProductCard/ProductCard";
-import { ProductCardSkeleton } from "@/components/ProductCard/ProductCardSkeleton";
+import { ProductCard, ProductCardSkeleton } from "../ProductCard";
 
-type ProductListProps = {
+interface ProductListProps {
 	products: Product[];
     isPending: boolean;
     isError: boolean;
@@ -13,7 +12,7 @@ export const ProductList = ({ products, isPending, isError, error }: ProductList
 	return (
 		<ul className="flex gap-4 flex-wrap">
 			{isPending &&
-				new Array(9).fill(null).map((_, i) => {
+				[...Array(9)].fill(null).map((_, i) => {
 					return (
 						<li key={i} className="basis-[calc((100%-32px)/3)]">
 							<ProductCardSkeleton />

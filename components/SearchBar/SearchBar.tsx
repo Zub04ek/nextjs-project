@@ -28,9 +28,13 @@
 
 import { Paper, InputBase, InputBaseProps, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { SearchBarProps } from "@/utils/types";
+// import { SearchBarProps } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
+
+interface SearchBarProps {
+	onChange: Function;
+}	
 
 export const SearchBar = ({onChange}: SearchBarProps ) => {
 	const [search, setSearch] = useState<string>("");
