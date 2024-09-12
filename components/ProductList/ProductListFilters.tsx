@@ -1,37 +1,35 @@
-import { useDebounce } from "@/hooks/useDebounce";
 import { ProductFilters } from "@/utils/types";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect } from "react";
 import { SelectField } from "../SelectField";
 import { SearchBar } from "../SearchBar";
 
 interface ProductListFiltersProps {
+	filters: ProductFilters;
 	onChange: (filters: ProductFilters) => void;
-	// handleDelete: Function;
-	// handleDelete: (category: Array<string>, tag: Array<string>) => void;
+	setSortBy: (value: SetStateAction<ProductFilters["sortBy"]>) => void;
+	setCategory: (value: SetStateAction<string[]>) => void;
+	setTag: (value: SetStateAction<string[]>) => void;
+	setSearch: (value: SetStateAction<string>) => void;
     categories: Set<string>;
 	tags: Set<string>;
 };
 
 const SORT_OPTIONS = [
-	"HIGHEST_RATING",
-	"LOWEST_RATING",
-	"HIGHEST_PRICE",
-	"LOWEST_PRICE",
+	"highest rating",
+	"lowest rating",
+	"highest price",
+	"lowest price",
 ];
 
-export const ProductListFilters = ({ onChange, categories, tags }: ProductListFiltersProps) => {
-	const [search, setSearch] = useState<ProductFilters["search"]>("");
-	const debouncedSearch = useDebounce(search);
-
-	const [sortBy, setSortBy] =
-		useState<ProductFilters["sortBy"]>("HIGHEST_RATING");
-	const [category, setCategory] = useState<ProductFilters["category"]>();
-	const [tag, setTag] = useState<ProductFilters["tag"]>();
+export const ProductListFilters = ({ filters, onChange, setSortBy, 
+	setCategory,
+	setTag,
+	setSearch, categories, tags }: ProductListFiltersProps) => {
 
 	useEffect(() => {
-		onChange({ sortBy, category: category || [], tag: tag || [], search: debouncedSearch });
+		onChange(filters);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sortBy, category, tag, debouncedSearch]);
+	}, [filters]);
 
 	return (
 		<>
@@ -41,7 +39,7 @@ export const ProductListFilters = ({ onChange, categories, tags }: ProductListFi
 						id="sortBy"
 						options={SORT_OPTIONS}
 						multiple={false}
-						selectValue={sortBy}
+						selectValue={filters.sortBy}
 						setValue={setSortBy}
 					/>
 				</li>
@@ -50,7 +48,7 @@ export const ProductListFilters = ({ onChange, categories, tags }: ProductListFi
 						id="category"
 						labelName="Category"
 						options={Array.from(categories)}
-						selectValue={category || []}
+						selectValue={filters.category}
                         setValue={setCategory}
 						multiple
 					/>
@@ -61,13 +59,13 @@ export const ProductListFilters = ({ onChange, categories, tags }: ProductListFi
 						labelName="Tag"
 						options={Array.from(tags)}
 						multiple
-						selectValue={tag || []}
+						selectValue={filters.tag}
                         setValue={setTag}
 					/>
 				</li>
 			</ul>
 			<div className="flex-[0_1_calc(20%-9.6px)]">
-				<SearchBar onChange={setSearch} />
+				<SearchBar searchValue={filters.search} setValue={setSearch} />
 			</div>
 		</>
 	);

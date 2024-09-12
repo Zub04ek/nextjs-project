@@ -20,7 +20,7 @@ export interface Product {
 }
 
 export type ProductFilters = {
-	sortBy: "HIGHEST_RATING" | "LOWEST_RATING" | "HIGHEST_PRICE" | "LOWEST_PRICE";
+	sortBy: "highest rating" | "lowest rating" | "highest price" | "lowest price";
 	category: Array<string>;
 	tag: Array<string>;
 	search: string;

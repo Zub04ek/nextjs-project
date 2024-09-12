@@ -1,50 +1,13 @@
-// import { OutlinedInput, InputBaseProps, FormControl, IconButton } from "@mui/material";
-// import SearchIcon from '@mui/icons-material/Search';
-// import React from "react";
-
-// export default function SearchField() {
-// 	return (
-// 		<FormControl>
-//             <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-//                 <SearchIcon />
-//             </IconButton>
-// 			<OutlinedInput
-// 				placeholder="Search"
-// 				className="bg-white transition-all ease-in-out duration-300 border-2 border-transparent hover:border-[#111111] focus:border-[#111111]"
-// 				sx={{
-// 					"& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input": {
-// 						py: "12px",
-// 						pl: "20px",
-// 						pr: "12px",
-// 					},
-// 					borderRadius: "100px",
-// 					fontWeight: 500,
-// 					lineHeight: 1.5,
-// 				}}
-// 			/>
-// 		</FormControl>
-// 	);
-// }
-
-import { Paper, InputBase, InputBaseProps, IconButton } from "@mui/material";
+import { Paper, InputBase, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-// import { SearchBarProps } from "@/utils/types";
-import { useEffect, useState } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
+import { SetStateAction } from "react";
 
 interface SearchBarProps {
-	onChange: Function;
-}	
+	searchValue: string;
+	setValue: (value: SetStateAction<string>) => void;
+}
 
-export const SearchBar = ({onChange}: SearchBarProps ) => {
-	const [search, setSearch] = useState<string>("");
-	const debouncedSearch = useDebounce(search);
-
-	useEffect(() => {
-		onChange(debouncedSearch)
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [debouncedSearch])
-	
+export const SearchBar = ({ searchValue, setValue }: SearchBarProps) => {
 	return (
 		<Paper
 			component="form"
@@ -66,10 +29,10 @@ export const SearchBar = ({onChange}: SearchBarProps ) => {
 			<InputBase
 				sx={{ flex: 1, fontWeight: 500 }}
 				placeholder="Search"
-				value={search}
-				onChange={e => setSearch(e.target.value)}
+				value={searchValue}
+				onChange={e => setValue(e.target.value)}
 				inputProps={{ "aria-label": "search" }}
 			/>
 		</Paper>
 	);
-}
+};

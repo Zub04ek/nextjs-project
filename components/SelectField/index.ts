@@ -1,2 +1,2 @@
 export {SelectField} from './SelectField';
-export * from './SelectFieldStyles'
+export * from './SelectField.styles'

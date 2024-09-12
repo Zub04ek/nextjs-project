@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Chip, ChipProps, Rating } from "@mui/material";
 import { Product } from "@/utils/types";
 
@@ -12,7 +12,6 @@ export const ProductCard = ({
 		thumbnail,
 		title,
 		brand,
-		category,
 		rating,
 		price,
 		discountPercentage,
@@ -40,7 +39,6 @@ export const ProductCard = ({
 				</h2>
 				{brand && <p className="text-sm text-[#111111]">{brand}</p>}
 				<Rating value={rating} precision={0.1} size="small" readOnly/>
-				{/* <p>{rating}</p> */}
 				<div>
 				<span className="mr-1 font-open_sans font-bold text-sm text-[#A8A9AA] line-through">
 					${priceWithoutDiscount}

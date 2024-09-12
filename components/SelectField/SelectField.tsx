@@ -9,14 +9,15 @@ import {
 import { CheckBox, Check } from "@mui/icons-material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createUrl } from "@/utils/createUrl";
-import { CheckboxStyles, MenuItemStyles, MenuProps, SelectStyles } from "./SelectFieldStyles";
+import { CheckboxStyles, MenuItemStyles, MenuProps, SelectStyles } from "./SelectField.styles";
+import { SetStateAction } from "react";
 
 type SelectFieldProps = SelectProps & {
 	id: string;
 	labelName?: string;
 	options: Array<string>;
-	selectValue: Array<string> | string; 
-	setValue: Function
+	selectValue: Array<string> | string;
+	setValue: (value: SetStateAction<any>) => void;
 };
 
 export const SelectField = (props: SelectFieldProps) => {
@@ -27,7 +28,7 @@ export const SelectField = (props: SelectFieldProps) => {
 	const searchParams = useSearchParams();
 
 	const transformedValue = (value: string | Array<string>) => {
-		return id === "sortBy" && typeof value === "string" ? value.toLowerCase().replace("_", " ") : value;
+		return id === "sortBy" && typeof value === "string" ? value.replace("_", " ") : value;
 	};
 
 	const handleChange = (event: SelectChangeEvent<typeof selectValue>) => {
@@ -50,7 +51,6 @@ export const SelectField = (props: SelectFieldProps) => {
 		} else {
 			setValue(typeof value === "string" ? value.split(",") : value);
 		}
-		// setSelectValue({id: value });
 	};
 
 	return (
