@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-// import { getProducts } from "../../app/actions";
 // import { createUrl } from "@/utils/createUrl";
 import { Product, ProductFilters } from "@/utils/types";
 import { ChipsArray } from "@/components/ChipsArray";
@@ -12,7 +11,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { Chip } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { productOptions } from "@/utils/product";
+import { getProducts } from "@/app/actions";
 
 export const Products = ({
 	searchParams,
@@ -48,7 +47,10 @@ export const Products = ({
 	// 	queryFn: getProducts,
 	// });
 
-    const {data: products, isPending, isError, error} = useSuspenseQuery(productOptions)
+    const {data: products, isPending, isError, error} = useSuspenseQuery({
+		queryKey: ['products'],
+		queryFn: () => getProducts(),
+	  })
 
 	useEffect(() => {
 		if (products) {

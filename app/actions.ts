@@ -1,3 +1,4 @@
+"use server"
 import { Product, ProductFilters } from "@/utils/types";
 import axios from "axios";
 
