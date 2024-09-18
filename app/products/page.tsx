@@ -1,16 +1,12 @@
-"use client";
-
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { Products } from "@/components/Products";
 import { getQueryClient } from "@/utils/get-query-client";
 import { getProducts } from "../actions";
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
 	const queryClient = getQueryClient();
 
-	// void queryClient.prefetchQuery(productOptions)
-
-	queryClient.prefetchQuery({
+	await queryClient.prefetchQuery({
 		queryKey: ["products"],
 		queryFn: () => getProducts(),
 	});

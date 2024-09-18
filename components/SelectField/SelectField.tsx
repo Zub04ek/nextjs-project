@@ -78,7 +78,7 @@ export const SelectField = (props: SelectFieldProps) => {
 							<Checkbox
 								sx={CheckboxStyles(id)}
 								checked={selectValue.indexOf(option) > -1}
-								checkedIcon={id === "sort" ? <Check /> : <CheckBox />}
+								checkedIcon={id === "sortBy" ? <Check /> : <CheckBox />}
 							/>
 							{transformedValue(option)}
 						</MenuItem>

@@ -13,12 +13,13 @@ import axios from "axios";
 // 	}
 // };
 
-export const getProducts = async () => {
+export const getProducts = async (): Promise<Product[] | undefined> => {
 	try {
 		const { data } = await axios.get(
 			`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`,
 		);
-		return data.products as Product[];
+		const products = data.products as Product[];
+        return products.sort((a, b) => b.rating - a.rating);
 	} catch (error) {
 		console.log("error :>> ", error);
 	}

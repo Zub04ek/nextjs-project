@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 // import { createUrl } from "@/utils/createUrl";
 import { Product, ProductFilters } from "@/utils/types";
@@ -10,8 +9,7 @@ import { ProductList, ProductListFilters } from "@/components/ProductList";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Chip } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { getProducts } from "@/app/actions";
+import { useProducts } from "@/hooks/useProducts";
 
 export const Products = ({
 	searchParams,
@@ -37,20 +35,7 @@ export const Products = ({
 	const [search, setSearch] = useState<ProductFilters["search"]>("");
 	const debouncedSearch = useDebounce(search);
 
-	// const {
-	// 	isPending,
-	// 	isError,
-	// 	data: products,
-	// 	error,
-	// } = useQuery({
-	// 	queryKey: ["products"],
-	// 	queryFn: getProducts,
-	// });
-
-    const {data: products, isPending, isError, error} = useSuspenseQuery({
-		queryKey: ['products'],
-		queryFn: () => getProducts(),
-	  })
+    const {data: products, isPending, isError, error} = useProducts();
 
 	useEffect(() => {
 		if (products) {
@@ -109,7 +94,7 @@ export const Products = ({
 				});
 
 				const isSelectedCategory =
-					category.length === 0 || category?.includes(product.category);
+					category.length === 0 || category.includes(product.category);
 				const isSelectedTag =
 					tag.length === 0 || tag.filter(t => product.tags.includes(t)).length;
 

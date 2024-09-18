@@ -45,7 +45,7 @@ export const CheckboxStyles = (id: string) => [
 		},
 		p: 0,
 	},
-	id === "sort" && {
+	id === "sortBy" && {
 		"& svg": {
 			fill: "transparent",
 		},
