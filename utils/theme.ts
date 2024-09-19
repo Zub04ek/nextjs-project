@@ -17,10 +17,23 @@ const roboto = Roboto({
 	display: "swap",
 });
 
-const theme = createTheme({
+let theme = createTheme({
+	breakpoints: {
+		values: {
+			xs: 0,
+			sm: 640,
+			md: 768,
+			lg: 1024,
+			xl: 1280,
+		},
+	},
 	typography: {
 		fontFamily: inter.style.fontFamily,
 	},
+});
+
+theme = {
+	...theme,
 	components: {
 		MuiOutlinedInput: {
 			styleOverrides: {
@@ -34,7 +47,21 @@ const theme = createTheme({
 		MuiPaper: {
 			styleOverrides: {
 				root: {
-					top: "120px !important",
+					maxHeight: "256px !important",
+					"&::-webkit-scrollbar-track": {
+						backgroundColor: "transparent",
+						borderRadius: "8px !important",
+					},
+					scrollbarWidth: "thin",
+					scrollBehavior: "smooth",
+					
+					"::-webkit-scrollbar-thumb": {
+						borderRadius: "8px !important",
+					},
+					
+					[theme.breakpoints.up("lg")]: {
+						top: "120px !important",
+					},
 				},
 			},
 		},
@@ -62,20 +89,20 @@ const theme = createTheme({
 					fontWeight: 400,
 					lineHeight: 1.5,
 					color: "#111111",
-					['& svg']: {
+					["& svg"]: {
 						width: "16px",
 						height: "16px",
 					},
-					['& .MuiChip-deleteIcon']: {
+					["& .MuiChip-deleteIcon"]: {
 						color: "#9EAAB8",
 					},
-					['&.MuiChip-colorError .MuiChip-deleteIcon']: {
+					["&.MuiChip-colorError .MuiChip-deleteIcon"]: {
 						color: "#111111",
 					},
-				}
-			}
-		}
+				},
+			},
+		},
 	},
-});
+};
 
 export default theme;

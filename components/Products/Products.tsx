@@ -184,8 +184,8 @@ export const Products = ({
 	return (
 		<main className="min-h-screen">
 			<div className="flex flex-col gap-10 max-w-7xl px-12 pt-16 pb-[100px] my-0 mx-auto">
-				<div className="flex gap-3 flex-wrap items-center">
-					<h1 className="flex-[0_1_calc(20%-9.6px)] text-2xl">
+				<div className="flex gap-3 flex-wrap sm:items-center ">
+					<h1 className="lg:flex-[0_1_calc(20%-9.6px)] text-2xl">
 						Products: {visibleProducts ? visibleProducts.length : 0}
 					</h1>
 					<ProductListFilters

@@ -33,8 +33,8 @@ export const ProductListFilters = ({ filters, onChange, setSortBy,
 
 	return (
 		<>
-			<ul className="flex gap-3 flex-wrap flex-auto">
-				<li className="flex-1">
+			<ul className="flex gap-3 flex-wrap flex-auto w-full lg:w-auto order-3 lg:order-2">
+				<li className="w-full sm:flex-1">
 					<SelectField
 						id="sortBy"
 						options={SORT_OPTIONS}
@@ -43,7 +43,7 @@ export const ProductListFilters = ({ filters, onChange, setSortBy,
 						setValue={setSortBy}
 					/>
 				</li>
-				<li className="flex-1">
+				<li className="w-full sm:flex-1">
 					<SelectField
 						id="category"
 						labelName="Category"
@@ -53,7 +53,7 @@ export const ProductListFilters = ({ filters, onChange, setSortBy,
 						multiple
 					/>
 				</li>
-				<li className="flex-1">
+				<li className="w-full sm:flex-1">
 					<SelectField
 						id="tag"
 						labelName="Tag"
@@ -64,7 +64,7 @@ export const ProductListFilters = ({ filters, onChange, setSortBy,
 					/>
 				</li>
 			</ul>
-			<div className="flex-[0_1_calc(20%-9.6px)]">
+			<div className="w-full sm:flex-1 lg:flex-[0_1_calc(20%-9.6px)] order-2 lg:order-3">
 				<SearchBar searchValue={filters.search} setValue={setSearch} />
 			</div>
 		</>

@@ -20,8 +20,7 @@ export const ProductList = ({
 			// initial={{ opacity: 0 }}
 			// animate={{ opacity: 1 }}
 			// layout
-			// className="flex gap-4 flex-wrap"
-			className="grid grid-cols-[repeat(auto-fit,_minmax(auto,_384px))] gap-4"
+			className="flex gap-4 flex-wrap justify-center"
 		>
 			{/* {isPending &&
 				[...Array(9)].fill(null).map((_, i) => {
@@ -42,7 +41,7 @@ export const ProductList = ({
 								exit={{ opacity: 0 }}
 								layout
 								key={product.id}
-								// className="basis-[calc((100%-32px)/3)]"
+								className="basis-[clamp(224px,_100%,_384px)] md:basis-[clamp(328px,_calc((100%-16px)/2),_384px)] lg:basis-[calc((100%-32px)/3)]"
 							>
 								<ProductCard product={product} />
 							</motion.li>
