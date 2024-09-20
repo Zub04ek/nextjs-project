@@ -1,5 +1,5 @@
 import { Paper, InputBase, IconButton } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Search, CloseOutlined } from "@mui/icons-material";
 import { SetStateAction } from "react";
 
 interface SearchBarProps {
@@ -13,7 +13,7 @@ export const SearchBar = ({ searchValue, setValue }: SearchBarProps) => {
 			component="form"
 			className="bg-white transition-all ease-in-out duration-300 border-2 border-transparent hover:border-[#111111] focus-within:border-[#111111]"
 			sx={{
-				pr: "12px",
+				pr: "2px",
 				pl: "2px",
 				display: "flex",
 				alignItems: "center",
@@ -24,7 +24,7 @@ export const SearchBar = ({ searchValue, setValue }: SearchBarProps) => {
 			}}
 		>
 			<IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-				<SearchIcon sx={{ color: "#75818F" }} />
+				<Search sx={{ color: "#75818F" }} />
 			</IconButton>
 			<InputBase
 				sx={{ flex: 1, fontWeight: 500 }}
@@ -33,6 +33,16 @@ export const SearchBar = ({ searchValue, setValue }: SearchBarProps) => {
 				onChange={e => setValue(e.target.value)}
 				inputProps={{ "aria-label": "search" }}
 			/>
+			{searchValue.length > 0 && (
+				<IconButton
+					type="button"
+					sx={{ p: "8px" }}
+					aria-label="clear"
+					onClick={() => setValue("")}
+				>
+					<CloseOutlined fontSize="small" sx={{ color: "#111111" }} />
+				</IconButton>
+			)}
 		</Paper>
 	);
 };

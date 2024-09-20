@@ -1,12 +1,3 @@
-// export type SelectFieldProps = {
-// 	id: string;
-// 	labelName?: string;
-// 	options: Array<string>;
-// } & (
-// 		| { selectValue: Array<string>; setSortBy?: never }
-// 		| { selectValue: string; setSortBy: Function }
-// 	);
-
 export interface Product {
 	id: number;
 	title: string;
@@ -20,8 +11,8 @@ export interface Product {
 }
 
 export type ProductFilters = {
-	sortBy: "highest rating" | "lowest rating" | "highest price" | "lowest price";
+	sortBy: "Highest rating" | "Lowest rating" | "Highest price" | "Lowest price";
 	category: Array<string>;
 	tag: Array<string>;
 	search: string;
-  };
+};

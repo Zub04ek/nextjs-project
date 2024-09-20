@@ -15,10 +15,10 @@ interface ProductListFiltersProps {
 };
 
 const SORT_OPTIONS = [
-	"highest rating",
-	"lowest rating",
-	"highest price",
-	"lowest price",
+	"Highest rating",
+	"Lowest rating",
+	"Highest price",
+	"Lowest price",
 ];
 
 export const ProductListFilters = ({ filters, onChange, setSortBy, 
@@ -28,7 +28,6 @@ export const ProductListFilters = ({ filters, onChange, setSortBy,
 
 	useEffect(() => {
 		onChange(filters);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filters]);
 
 	return (

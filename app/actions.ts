@@ -1,19 +1,8 @@
 "use server"
-import { Product, ProductFilters } from "@/utils/types";
+import { Product } from "@/utils/types";
 import axios from "axios";
 
-// export const getProducts = async (options?: ProductFilters) => {
-// 	try {
-// 		const { data } = await axios.get(
-// 			`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`,
-// 		);
-
-// 	} catch (error) {
-// 		console.log("error :>> ", error);
-// 	}
-// };
-
-export const getProducts = async (): Promise<Product[] | undefined> => {
+export const getProducts = async (): Promise<Product[]> => {
 	try {
 		const { data } = await axios.get(
 			`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`,
@@ -21,48 +10,9 @@ export const getProducts = async (): Promise<Product[] | undefined> => {
 		const products = data.products as Product[];
         return products.sort((a, b) => b.rating - a.rating);
 	} catch (error) {
-		console.log("error :>> ", error);
+		throw(error)
 	}
 };
-
-// export const getFilteredProducts = (products: Product[], options?: ProductFilters) => {
-// 	let filteredProducts = products;
-
-// 	if (options?.sortBy) {
-// 		filteredProducts = filteredProducts.sort((a, b) => {
-// 			switch (options?.sortBy) {
-// 				case "HIGHEST_RATING":
-// 					return b.rating - a.rating;
-// 				case "LOWEST_RATING":
-// 					return a.rating - b.rating;
-// 				case "HIGHEST_PRICE":
-// 					return b.price - a.price;
-// 				case "LOWEST_PRICE":
-// 					return a.price - b.price;
-// 				default:
-// 					return b.rating - a.rating;
-// 			}
-// 		});
-// 	}
-
-// 	if (options?.category) {
-// 		filteredProducts = filteredProducts.filter(prod =>
-// 			options?.category?.includes(prod.category),
-// 		);
-// 	}
-// 	if (options?.tag) {
-// 		filteredProducts = filteredProducts.filter(prod =>
-// 			options?.tag?.filter(t => prod.tags.includes(t)),
-// 		);
-// 	}
-// 	if (options?.search) {
-// 		filteredProducts = filteredProducts.filter(prod =>
-// 			prod.title.toLowerCase().includes(options.search!.toLowerCase()),
-// 		);
-// 	}
-
-// 	return filteredProducts;
-// }
 
 // export const filteredProducts = (products: Product[], queryParams: { category: string; tag: string; sortBy: string }) => {
 // 	const selectedCategories = queryParams?.category?.split(",");

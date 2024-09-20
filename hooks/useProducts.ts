@@ -1,11 +1,15 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query'
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query'
 import { getProducts } from '@/app/actions';
+import { Product } from '@/utils/types';
 
-export const useProducts = () => {
-    return useQuery({
+export const useProducts = (
+    options?: Omit<UseQueryOptions<Product[]>, 'queryKey' | 'queryFn'>,
+) => {
+    return useQuery<Product[]>({
         queryKey: ['products'],
 		queryFn: () => getProducts(),
+        ...options,
     })
 }

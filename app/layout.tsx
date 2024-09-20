@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className={`${inter.variable} ${open_sans.variable}`}>
-			<body className="font-inter">
+			<body suppressHydrationWarning className="font-inter">
 				<AppRouterCacheProvider>
 					<ThemeProvider theme={theme}>
 						<TanstackProvider>{children}</TanstackProvider>
