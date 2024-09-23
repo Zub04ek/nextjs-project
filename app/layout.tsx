@@ -25,7 +25,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className={`${inter.variable} ${open_sans.variable}`}>
+		<html lang="en" className={`${inter.variable} ${open_sans.variable} scroll-smooth`}>
 			<body suppressHydrationWarning className="font-inter">
 				<AppRouterCacheProvider>
 					<ThemeProvider theme={theme}>
