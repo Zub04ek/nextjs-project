@@ -9,7 +9,7 @@ export default function Home() {
           Get started by editing&nbsp;
           <code className="font-mono font-bold">app/page.tsx</code>
         </p>
-          <Link href="/products?sortBy=highest+rating" className="block w-fit my-0 mx-auto border-gray-300 p-4 dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit rounded-xl border bg-sky-300 font-bold text-lg lg:m-0 hover:shadow-2xl hover:shadow-orange-300">Products</Link>
+          <Link href="/products" className="block w-fit my-0 mx-auto border-gray-300 p-4 dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit rounded-xl border bg-sky-300 font-bold text-lg lg:m-0 hover:shadow-2xl hover:shadow-orange-300">Products</Link>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
           <a
             className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
