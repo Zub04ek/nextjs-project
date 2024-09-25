@@ -5,7 +5,7 @@ import axios from "axios";
 export const getProducts = async (): Promise<Product[]> => {
 	try {
 		const { data } = await axios.get(
-			`${process.env.NEXT_PUBLIC_PRODUCTSBASE_URL}/products`,
+			`${process.env.PRODUCTSBASE_URL}/products`,
 		);
 		const products = data.products as Product[];
         return products.sort((a, b) => b.rating - a.rating);
