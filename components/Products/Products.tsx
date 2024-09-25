@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Product, ProductFilters } from "@/utils/types";
 import { ChipsArray } from "@/components/ChipsArray";
 import { ProductList, ProductListFilters } from "@/components/ProductList";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useDebounce } from "@/api/hooks/useDebounce";
 import { Chip, Fab } from "@mui/material";
 import { CloseOutlined, KeyboardArrowUp } from "@mui/icons-material";
 import { ScrollTop } from "../ScrollTop";
@@ -96,8 +96,8 @@ export const Products = ({ products }: ProductsProps) => {
 	};
 
 	return (
-		<main className="min-h-screen">
-			<div className="flex flex-col gap-10 max-w-7xl px-4 sm:px-12 pt-16 pb-[100px] my-0 mx-auto">
+		<main className="min-h-screen max-w-7xl px-4 sm:px-12 pt-10 pb-[100px] my-0 mx-auto">
+			<div className="flex flex-col gap-10">
 				<div
 					id="back-to-top-anchor"
 					className="flex gap-3 flex-wrap sm:items-center "

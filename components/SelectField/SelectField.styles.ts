@@ -2,6 +2,10 @@ const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 12;
 
 export const MenuProps = {
+	anchorOrigin: {
+		vertical: 60,
+		horizontal: 115,
+	},
 	PaperProps: {
 		style: {
 			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
@@ -29,6 +33,9 @@ export const MenuItemStyles = {
 	fontWeight: 500,
 	"&.Mui-selected": {
 		backgroundColor: "transparent",
+	},
+	"&.Mui-selected:hover": {
+		backgroundColor: "rgba(0, 0, 0, 0.04)",
 	},
 	"&.Mui-focusVisible": {
 		backgroundColor: "transparent",

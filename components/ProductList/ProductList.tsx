@@ -14,6 +14,10 @@ export const ProductList = ({ products }: ProductListProps) => {
 		leave: { opacity: 0, transform: "translateY(100px)" },
 	});
 
+	if (products.length === 0) {
+		return <div>Nothing found</div>
+	}
+
 	// const transitions = useTransition(products, {
 	// 	trail: 400 / products.length,
 	// 	from: { opacity: 0, scale: 0 },
@@ -23,7 +27,7 @@ export const ProductList = ({ products }: ProductListProps) => {
 
 	return (
 		<ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-			{products.length &&
+			{products.length > 0 &&
 				transitions((style, product: Product) => {
 					return (
 						<animated.li

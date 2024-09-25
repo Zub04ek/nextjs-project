@@ -48,20 +48,21 @@ theme = {
 			styleOverrides: {
 				root: {
 					maxHeight: "256px !important",
+					transition: 'border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
 					"&::-webkit-scrollbar-track": {
 						backgroundColor: "transparent",
 						borderRadius: "8px !important",
 					},
 					scrollbarWidth: "thin",
 					scrollBehavior: "smooth",
-					
+
 					"::-webkit-scrollbar-thumb": {
 						borderRadius: "8px !important",
 					},
-					
-					[theme.breakpoints.up("lg")]: {
-						top: "120px !important",
-					},
+
+					// [theme.breakpoints.up("lg")]: {
+					// 	top: "120px !important",
+					// },
 				},
 			},
 		},
@@ -77,6 +78,16 @@ theme = {
 					[`& .MuiInputBase-input::placeholder`]: {
 						opacity: 1,
 						color: "#75818F",
+					},
+				},
+			},
+		},
+		MuiIconButton: {
+			styleOverrides: {
+				root: {
+					transition: 'opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+					["&:hover"]: {
+						backgroundColor: "transparent",
 					},
 				},
 			},

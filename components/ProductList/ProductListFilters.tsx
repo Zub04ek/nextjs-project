@@ -45,7 +45,7 @@ export const ProductListFilters = ({ filters, onChange, setSortBy,
 				<li className="w-full sm:flex-1">
 					<SelectField
 						id="category"
-						labelName="Category"
+						labelName="Categories"
 						options={Array.from(categories)}
 						selectValue={filters.category}
                         setValue={setCategory}
@@ -55,7 +55,7 @@ export const ProductListFilters = ({ filters, onChange, setSortBy,
 				<li className="w-full sm:flex-1">
 					<SelectField
 						id="tag"
-						labelName="Tag"
+						labelName="Tags"
 						options={Array.from(tags)}
 						multiple
 						selectValue={filters.tag}
