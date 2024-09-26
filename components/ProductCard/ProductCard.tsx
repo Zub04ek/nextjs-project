@@ -35,7 +35,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 				<h2 className="line-clamp-2 font-open_sans font-bold text-2xl text-[#1A191F]">
 					{title}
 				</h2>
-				<p className="self-center text-sm text-[#111111]">
+				<p className="self-center text-sm text-black">
 					{brand ? brand : "Unknown brand"}
 				</p>
 				<StarRating rating={rating} />

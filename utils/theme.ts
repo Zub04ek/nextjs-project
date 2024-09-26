@@ -17,20 +17,28 @@ const roboto = Roboto({
 	display: "swap",
 });
 
-let theme = createTheme({
-	breakpoints: {
-		values: {
-			xs: 0,
-			sm: 640,
-			md: 768,
-			lg: 1024,
-			xl: 1280,
+let theme = createTheme(
+	{
+		breakpoints: {
+			values: {
+				xs: 0,
+				sm: 640,
+				md: 768,
+				lg: 1024,
+				xl: 1280,
+			},
+		},
+		palette: {
+			common: {
+				black: "#111111",
+			},
+		},
+		typography: {
+			fontFamily: inter.style.fontFamily,
 		},
 	},
-	typography: {
-		fontFamily: inter.style.fontFamily,
-	},
-});
+	{ cssVariables: true },
+);
 
 theme = {
 	...theme,
@@ -48,7 +56,7 @@ theme = {
 			styleOverrides: {
 				root: {
 					maxHeight: "256px !important",
-					transition: 'border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+					transition: "border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
 					"&::-webkit-scrollbar-track": {
 						backgroundColor: "transparent",
 						borderRadius: "8px !important",
@@ -85,7 +93,7 @@ theme = {
 		MuiIconButton: {
 			styleOverrides: {
 				root: {
-					transition: 'opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+					transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
 					["&:hover"]: {
 						backgroundColor: "transparent",
 					},
@@ -99,7 +107,7 @@ theme = {
 					fontSize: "16px",
 					fontWeight: 400,
 					lineHeight: 1.5,
-					color: "#111111",
+					color: theme.palette.common.black,
 					["& svg"]: {
 						width: "16px",
 						height: "16px",
@@ -108,7 +116,7 @@ theme = {
 						color: "#9EAAB8",
 					},
 					["&.MuiChip-colorError .MuiChip-deleteIcon"]: {
-						color: "#111111",
+						color: theme.palette.common.black,
 					},
 				},
 			},

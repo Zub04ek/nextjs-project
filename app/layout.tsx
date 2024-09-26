@@ -37,7 +37,7 @@ export default function RootLayout({
 			lang="en"
 			className={`${inter.variable} ${open_sans.variable} scroll-smooth`}
 		>
-			<body suppressHydrationWarning className="font-inter">
+			<body suppressHydrationWarning className="flex flex-col min-h-screen font-inter">
 				<AppRouterCacheProvider>
 					<ThemeProvider theme={theme}>
 						<TanstackProvider>{children}</TanstackProvider>

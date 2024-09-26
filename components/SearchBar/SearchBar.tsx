@@ -11,7 +11,7 @@ export const SearchBar = ({ searchValue, setValue }: SearchBarProps) => {
 	return (
 		<Paper
 			component="form"
-			className="bg-white border-2 border-transparent hover:border-[#111111] focus-within:border-[#111111]"
+			className="bg-white border-2 border-transparent hover:border-black focus-within:border-black"
 			sx={{
 				pr: "2px",
 				pl: "2px",
@@ -41,7 +41,7 @@ export const SearchBar = ({ searchValue, setValue }: SearchBarProps) => {
 					onClick={() => setValue("")}
 					className="opacity-50 hover:opacity-100"
 				>
-					<CloseOutlined fontSize="small" sx={{ color: "#111111" }}  />
+					<CloseOutlined fontSize="small" className="text-black"   />
 				</IconButton>
 			)}
 		</Paper>

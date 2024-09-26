@@ -1,7 +1,10 @@
+import theme from "@/utils/theme";
+import { MenuProps as MuiMenuProps, SxProps } from "@mui/material";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 12;
 
-export const MenuProps = {
+export const MenuProps: Partial<MuiMenuProps> = {
 	anchorOrigin: {
 		vertical: 60,
 		horizontal: 115,
@@ -15,7 +18,7 @@ export const MenuProps = {
 	},
 };
 
-export const SelectStyles = {
+export const SelectStyles: SxProps = {
 	"& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input": {
 		py: "12px",
 		pl: "20px",
@@ -26,7 +29,7 @@ export const SelectStyles = {
 	lineHeight: 1.5,
 };
 
-export const MenuItemStyles = {
+export const MenuItemStyles: SxProps = {
 	gap: "12px",
 	px: 2,
 	py: "12px",
@@ -42,13 +45,13 @@ export const MenuItemStyles = {
 	},
 };
 
-export const CheckboxStyles = (id: string) => [
+export const CheckboxStyles = (id: string): SxProps => [
 	{
 		"& svg": {
 			fill: "#9EAAB8",
 		},
 		"&.Mui-checked svg": {
-			fill: "#111111",
+			fill: theme.palette.common.black,
 		},
 		p: 0,
 	},

@@ -96,13 +96,12 @@ export const Products = ({ products }: ProductsProps) => {
 	};
 
 	return (
-		<main className="min-h-screen max-w-7xl px-4 sm:px-12 pt-10 pb-[100px] my-0 mx-auto">
-			<div className="flex flex-col gap-10">
+		<main className="max-w-7xl w-full flex-1 flex flex-col gap-10 px-4 sm:px-12 pt-10 pb-[100px] my-0 mx-auto">
 				<div
 					id="back-to-top-anchor"
 					className="flex gap-3 flex-wrap sm:items-center "
 				>
-					<h1 className="lg:flex-[0_1_calc(20%-9.6px)] text-2xl text-[#111111]">
+					<h1 className="lg:flex-[0_1_calc(20%-9.6px)] text-2xl text-black">
 						Products: {visibleProducts ? visibleProducts.length : 0}
 					</h1>
 					<ProductListFilters
@@ -159,7 +158,6 @@ export const Products = ({ products }: ProductsProps) => {
 						<KeyboardArrowUp />
 					</Fab>
 				</ScrollTop>
-			</div>
 		</main>
 	);
 };
