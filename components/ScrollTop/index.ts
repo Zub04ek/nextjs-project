@@ -1,1 +1,1 @@
-export {ScrollTop} from "./ScrollTop"
+export { ScrollTop } from './ScrollTop';

@@ -1,1 +1,1 @@
-export {ChipsArray} from './ChipsArray' 
+export { ChipsArray } from './ChipsArray';

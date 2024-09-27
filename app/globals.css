@@ -5,9 +5,9 @@
 @layer base {
   :root {
     --foreground-rgb: 0, 0, 0;
-    --background: #F0F0F0;
+    --background: #f0f0f0;
     --star-size: 20px;
-    --star-color: #F0F0F0;
+    --star-color: #f0f0f0;
     --star-background: #fc0;
   }
 }
@@ -48,12 +48,12 @@ img {
 
 .Stars {
   --percent: calc(var(--rating) / 5 * 100%);
-  
+
   display: inline-block;
   font-size: var(--star-size);
   font-family: Times;
   line-height: 1;
-  
+
   &::before {
     content: '★★★★★';
     letter-spacing: 3px;
@@ -62,7 +62,6 @@ img {
     -webkit-text-fill-color: transparent;
   }
 }
-
 
 /* loader */
 /* .spinner {
