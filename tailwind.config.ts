@@ -1,7 +1,15 @@
 import type { Config } from 'tailwindcss';
 import type { PluginAPI } from 'tailwindcss/types/config';
-const colors = require('tailwindcss/colors');
-const plugin = require('tailwindcss/plugin');
+import plugin from 'tailwindcss/plugin';
+
+let colors = require('tailwindcss/colors');
+
+delete colors['lightBlue'];
+delete colors['warmGray'];
+delete colors['trueGray'];
+delete colors['coolGray'];
+delete colors['blueGray'];
+colors = { ...colors, ...{ transparent: 'transparent' } };
 
 const config: Config = {
   content: [
@@ -12,9 +20,7 @@ const config: Config = {
   theme: {
     colors: {
       ...colors,
-      transparent: colors.transparent,
       black: '#111111',
-      white: colors.white,
     },
     extend: {
       backgroundImage: {

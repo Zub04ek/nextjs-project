@@ -18,23 +18,11 @@
   }
 }
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --background: #F0F0F0;
-  --star-size: 20px;
-  --star-color: #F0F0F0;
-  --star-background: #fc0;
-} */
-/* 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer components {
+  .loading-dot {
+    @apply origin-[32px_32px] animate-spin-slow after:absolute after:-ml-[3px] after:-mt-[3px] after:mb-0 after:mr-0 after:block after:h-[6px] after:w-[6px] after:rounded-[50%] after:bg-black after:content-['_'];
   }
-} */
+}
 
 body {
   color: rgb(var(--foreground-rgb));

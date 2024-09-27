@@ -2,12 +2,14 @@ import { Product } from '@/types/types';
 import { ProductCard } from '../ProductCard';
 import { useTransition, animated } from 'react-spring';
 import Image from 'next/image';
+import { SetStateAction } from 'react';
 
 interface ProductListProps {
   products: Product[];
+  setOpen: (value: SetStateAction<boolean>) => void;
 }
 
-export const ProductList = ({ products }: ProductListProps) => {
+export const ProductList = ({ products, setOpen }: ProductListProps) => {
   const transitions = useTransition(products, {
     from: { opacity: 0, transform: 'translateY(100px)' },
     enter: { opacity: 1, transform: 'translateY(0px)' },
@@ -35,7 +37,7 @@ export const ProductList = ({ products }: ProductListProps) => {
       {transitions((style, product: Product) => {
         return (
           <animated.li key={product.id} style={{ ...style }}>
-            <ProductCard product={product} />
+            <ProductCard product={product} setOpenToast={setOpen} />
           </animated.li>
         );
       })}

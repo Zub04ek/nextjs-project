@@ -8,6 +8,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { Chip, Fab } from '@mui/material';
 import { CloseOutlined, KeyboardArrowUp } from '@mui/icons-material';
 import { ScrollTop } from '../ScrollTop';
+import { ProductSnackbar } from '../ProductSnackbar';
 
 interface ProductsProps {
   products: Product[];
@@ -17,6 +18,8 @@ export const Products = ({ products }: ProductsProps) => {
   const [visibleProducts, setVisibleProducts] = useState<Product[]>(products);
   const [categories, setCategories] = useState<Set<string>>(new Set());
   const [tags, setTags] = useState<Set<string>>(new Set());
+
+  const [openToast, setOpenToast] = useState<boolean>(false);
 
   const [sortBy, setSortBy] = useState<ProductFilters['sortBy']>('Highest rating');
   const [category, setCategory] = useState<ProductFilters['category']>([]);
@@ -125,12 +128,13 @@ export const Products = ({ products }: ProductsProps) => {
           </li>
         )}
       </ul>
-      <ProductList products={visibleProducts} />
+      <ProductList products={visibleProducts} setOpen={setOpenToast} />
       <ScrollTop>
         <Fab size="small" aria-label="scroll back to top">
           <KeyboardArrowUp />
         </Fab>
       </ScrollTop>
+      <ProductSnackbar open={openToast} setOpen={setOpenToast} />
     </main>
   );
 };
