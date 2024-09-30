@@ -7,7 +7,9 @@ import { Product } from '@/types/types';
 export const ProductsRequest = () => {
   const { data: products } = useProducts();
 
-  if (products) {
-    return <Products products={products as Product[]} />;
+  if (!products) {
+    return null;
   }
+
+  return <Products products={products as Product[]} />;
 };

@@ -1,9 +1,11 @@
 {
   "extends": ["prettier", "plugin:tailwindcss/recommended", "eslint:recommended", "next/core-web-vitals"],
+  "plugins": ["prettier"],
   "rules": {
     "react/no-unescaped-entities": "off",
     "tailwindcss/no-custom-classname": "off",
     "no-undef": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "prettier/prettier": "error"
   }
 }
