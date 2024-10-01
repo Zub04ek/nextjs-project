@@ -1,1 +1,0 @@
-export { ProductSnackbar } from './ProductSnackbar';
