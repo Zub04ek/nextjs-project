@@ -5,7 +5,7 @@
     "react/no-unescaped-entities": "off",
     "tailwindcss/no-custom-classname": "off",
     "no-undef": "off",
-    "no-unused-vars": "warn",
-    "prettier/prettier": "error"
+    "no-unused-vars": "warn"
+    // "prettier/prettier": "error"
   }
 }
