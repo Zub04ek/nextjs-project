@@ -67,7 +67,7 @@ export const Products = ({ products }: ProductsProps) => {
             if (item) {
               return item.toString().toLowerCase().includes(debouncedSearch.toLowerCase());
             }
-          },
+          }
         );
 
         const isSelectedCategory = category.length === 0 || category.includes(product.category);
