@@ -37,7 +37,7 @@ let theme = createTheme(
       fontFamily: inter.style.fontFamily,
     },
   },
-  { cssVariables: true },
+  { cssVariables: true }
 );
 
 theme = {
