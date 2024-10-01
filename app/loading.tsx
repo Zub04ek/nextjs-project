@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <div className="relative inline-block h-16 w-16">
+      <div className="relative inline-block size-16">
         <div className="loading-dot animation-delay-[-0.036s] after:left-[50px] after:top-[50px]"></div>
         <div className="loading-dot animation-delay-[-0.072s] after:left-[45px] after:top-[54px]"></div>
         <div className="loading-dot animation-delay-[-0.108s] after:left-[39px] after:top-[57px]"></div>
