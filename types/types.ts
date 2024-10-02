@@ -12,7 +12,7 @@ export interface Product {
 
 export type ProductFilters = {
   sortBy: 'Highest rating' | 'Lowest rating' | 'Highest price' | 'Lowest price';
-  category: Array<string>;
-  tag: Array<string>;
+  selectedCategories: Array<string>;
+  selectedTags: Array<string>;
   search: string;
 };

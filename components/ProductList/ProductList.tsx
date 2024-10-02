@@ -16,7 +16,7 @@ export const ProductList = ({ products, setOpen }: ProductListProps) => {
     leave: { opacity: 0, transform: 'translateY(100px)' },
   });
 
-  if (products.length === 0) {
+  if (!products.length) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center">
         <Image src="/icon-search-no-result.png" alt="file folder" width={140} height={140} />
@@ -24,13 +24,6 @@ export const ProductList = ({ products, setOpen }: ProductListProps) => {
       </div>
     );
   }
-
-  // const transitions = useTransition(products, {
-  // 	trail: 400 / products.length,
-  // 	from: { opacity: 0, scale: 0 },
-  // 	enter: { opacity: 1, scale: 1 },
-  // 	leave: { opacity: 0, scale: 0 },
-  //   })
 
   return (
     <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

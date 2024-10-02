@@ -22,8 +22,8 @@ export const Products = ({ products }: ProductsProps) => {
   const [openToast, setOpenToast] = useState<boolean>(false);
 
   const [sortBy, setSortBy] = useState<ProductFilters['sortBy']>('Highest rating');
-  const [category, setCategory] = useState<ProductFilters['category']>([]);
-  const [tag, setTag] = useState<ProductFilters['tag']>([]);
+  const [selectedCategories, setSelectedCategories] = useState<ProductFilters['selectedCategories']>([]);
+  const [selectedTags, setSelectedTags] = useState<ProductFilters['selectedTags']>([]);
   const [search, setSearch] = useState<ProductFilters['search']>('');
   const debouncedSearch = useDebounce(search);
 
@@ -70,21 +70,21 @@ export const Products = ({ products }: ProductsProps) => {
           }
         );
 
-        const isSelectedCategory = category.length === 0 || category.includes(product.category);
-        const isSelectedTag = tag.length === 0 || tag.filter((t) => product.tags.includes(t)).length;
+        const isSelectedCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+        const isSelectedTag = selectedTags.length === 0 || selectedTags.filter((t) => product.tags.includes(t)).length;
 
         return isFoundFromSearch && isSelectedCategory && isSelectedTag;
       });
       setVisibleProducts(filteredProducts);
     }
-  }, [sortBy, category, tag, debouncedSearch]);
+  }, [sortBy, selectedCategories, selectedTags, debouncedSearch]);
 
-  const handleDelete = (group: string, chipToDelete: string) => {
-    if (group === 'category') {
-      setCategory((prev) => prev.filter((c) => c !== chipToDelete));
+  const handleDelete = (selectLabel: string, chipToDelete: string) => {
+    if (selectLabel === 'category') {
+      setSelectedCategories((prev) => prev.filter((c) => c !== chipToDelete));
     }
-    if (group === 'tag') {
-      setTag((prev) => prev.filter((t) => t !== chipToDelete));
+    if (selectLabel === 'tag') {
+      setSelectedTags((prev) => prev.filter((t) => t !== chipToDelete));
     }
   };
 
@@ -97,31 +97,33 @@ export const Products = ({ products }: ProductsProps) => {
         <ProductListFilters
           categories={categories}
           tags={tags}
-          filters={{ sortBy, category, tag, search }}
+          filters={{ sortBy, selectedCategories, selectedTags, search }}
           setSortBy={setSortBy}
-          setCategory={setCategory}
-          setTag={setTag}
+          setCategory={setSelectedCategories}
+          setTag={setSelectedTags}
           setSearch={setSearch}
           onChange={(filters) => {
             setSortBy(filters.sortBy);
-            setCategory(filters.category);
-            setTag(filters.tag);
+            setSelectedCategories(filters.selectedCategories);
+            setSelectedTags(filters.selectedTags);
             setSearch(filters.search);
           }}
         />
       </div>
       <ul className="flex min-h-8 flex-wrap items-center gap-2">
-        {category.length > 0 && <ChipsArray group="category" chipsArray={category} handleDelete={handleDelete} />}
-        {tag.length > 0 && <ChipsArray group="tag" chipsArray={tag} handleDelete={handleDelete} />}
-        {(category.length > 0 || tag.length > 0) && (
+        {selectedCategories.length > 0 && (
+          <ChipsArray selectLabel="category" chips={selectedCategories} handleDelete={handleDelete} />
+        )}
+        {selectedTags.length > 0 && <ChipsArray selectLabel="tag" chips={selectedTags} handleDelete={handleDelete} />}
+        {(selectedCategories.length > 0 || selectedTags.length > 0) && (
           <li>
             <Chip
               variant="outlined"
               label="Clear all"
               color="error"
               onDelete={() => {
-                setCategory([]);
-                setTag([]);
+                setSelectedCategories([]);
+                setSelectedTags([]);
               }}
               deleteIcon={<CloseOutlined />}
             />

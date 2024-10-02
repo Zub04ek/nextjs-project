@@ -1,18 +1,11 @@
 'use client';
-import { Inter, Roboto } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 
 const inter = Inter({
   weight: ['400', '500', '700'],
   variable: '--font-inter',
-  subsets: ['latin'],
-  display: 'swap',
-});
-
-const roboto = Roboto({
-  weight: ['400'],
-  variable: '--font-roboto',
   subsets: ['latin'],
   display: 'swap',
 });
@@ -57,20 +50,25 @@ theme = {
         root: {
           maxHeight: '256px !important',
           transition: 'border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-          '&::-webkit-scrollbar-track': {
-            backgroundColor: 'transparent',
-            borderRadius: '8px !important',
-          },
           scrollbarWidth: 'thin',
           scrollBehavior: 'smooth',
-
-          '::-webkit-scrollbar-thumb': {
-            borderRadius: '8px !important',
+          scrollbarColor: 'rgba(17, 17, 17, 0.2) transparent',
+          '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
           },
-
-          // [theme.breakpoints.up("lg")]: {
-          // 	top: "120px !important",
-          // },
+          '&::-webkit-scrollbar-track, & *::-webkit-scrollbar-track': {
+            borderRadius: 8,
+          },
+          '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
+            borderRadius: 8,
+            backgroundColor: 'rgba(17, 17, 17, 0.2)',
+            backgroundClip: 'padding-box',
+            minHeight: 24,
+            border: '3px solid transparent',
+          },
+          '&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner': {
+            backgroundColor: 'transparent',
+          },
         },
       },
     },
@@ -103,7 +101,6 @@ theme = {
     MuiChip: {
       styleOverrides: {
         root: {
-          fontFamily: roboto.style.fontFamily,
           fontSize: '16px',
           fontWeight: 400,
           lineHeight: 1.5,

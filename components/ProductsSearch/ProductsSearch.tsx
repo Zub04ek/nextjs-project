@@ -7,7 +7,7 @@ interface SearchBarProps {
   setValue: (value: SetStateAction<string>) => void;
 }
 
-export const SearchBar = ({ searchValue, setValue }: SearchBarProps) => {
+export const ProductsSearch = ({ searchValue, setValue }: SearchBarProps) => {
   return (
     <Paper
       component="form"

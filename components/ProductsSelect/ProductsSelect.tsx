@@ -1,6 +1,6 @@
 import { FormControl, Select, SelectChangeEvent, SelectProps, MenuItem, Checkbox } from '@mui/material';
 import { CheckBox, Check } from '@mui/icons-material';
-import { CheckboxStyles, MenuItemStyles, MenuProps, SelectStyles } from './SelectField.styles';
+import { CheckboxStyles, MenuItemStyles, MenuProps, SelectStyles } from './ProductsSelect.styles';
 import { SetStateAction } from 'react';
 
 type SelectFieldProps = SelectProps & {
@@ -11,7 +11,7 @@ type SelectFieldProps = SelectProps & {
   setValue: (value: SetStateAction<any>) => void;
 };
 
-export const SelectField = (props: SelectFieldProps) => {
+export const ProductsSelect = (props: SelectFieldProps) => {
   const { id, labelName, options, selectValue, setValue, multiple } = props;
 
   const transformedValue = (value: string | Array<string>) => {
@@ -19,9 +19,7 @@ export const SelectField = (props: SelectFieldProps) => {
   };
 
   const handleChange = (event: SelectChangeEvent<typeof selectValue>) => {
-    const {
-      target: { value },
-    } = event;
+    const value = event.target.value;
 
     if (id === 'sortBy') {
       setValue(value);

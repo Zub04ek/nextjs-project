@@ -29,7 +29,6 @@ const config: Config = {
       },
       fontFamily: {
         inter: ['var(--font-inter)'],
-        open_sans: ['var(--font-open-sans)'],
       },
       animation: {
         'spin-slow': 'spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite',

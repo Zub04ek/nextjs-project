@@ -1,0 +1,1 @@
+export { ProductCardRating } from './ProductCardRating';

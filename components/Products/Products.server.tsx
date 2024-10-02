@@ -1,8 +1,7 @@
 'use client';
 
 import { useProducts } from '@/api/hooks/useProducts';
-import { Products } from './Products';
-import { Product } from '@/types/types';
+import { Products } from './Products.client';
 
 export const ProductsRequest = () => {
   const { data: products } = useProducts();
@@ -11,5 +10,5 @@ export const ProductsRequest = () => {
     return null;
   }
 
-  return <Products products={products as Product[]} />;
+  return <Products products={products} />;
 };

@@ -6,7 +6,7 @@ interface StarProps {
   rating: number;
 }
 
-export const StarRating = ({ rating }: StarProps) => {
+export const ProductCardRating = ({ rating }: StarProps) => {
   const starStyle = {
     '--rating': rating,
   } as CSSProperties;

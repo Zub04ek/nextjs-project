@@ -1,2 +1,2 @@
-export { Products } from './Products';
-export { ProductsRequest } from './ProductsRequest';
+export { Products } from './Products.client';
+export { ProductsRequest } from './Products.server';
