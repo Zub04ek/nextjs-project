@@ -1,7 +1,8 @@
-import { ProductFilters } from '@/types/types';
 import { SetStateAction, useEffect } from 'react';
-import { ProductsSelect } from '../ProductsSelect';
+
+import { ProductFilters } from '@/types/types';
 import { ProductsSearch } from '../ProductsSearch';
+import { ProductsSelect } from '../ProductsSelect';
 
 interface ProductListFiltersProps {
   filters: ProductFilters;

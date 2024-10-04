@@ -1,8 +1,10 @@
+import { SetStateAction } from 'react';
+import Image from 'next/image';
+
+import { animated, useTransition } from 'react-spring';
+
 import { Product } from '@/types/types';
 import { ProductCard } from '../ProductCard';
-import { useTransition, animated } from 'react-spring';
-import Image from 'next/image';
-import { SetStateAction } from 'react';
 
 interface ProductListProps {
   products: Product[];

@@ -1,6 +1,8 @@
 'use server';
-import { Product } from '@/types/types';
+
 import axios from 'axios';
+
+import { Product } from '@/types/types';
 
 export const getProducts = async (): Promise<Product[]> => {
   try {

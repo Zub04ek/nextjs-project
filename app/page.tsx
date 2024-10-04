@@ -1,9 +1,10 @@
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
 import { getProducts } from '@/api/endpoints/getProducts';
-import { ProductsRequest } from '@/components/Products';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
 import { getQueryClient } from '@/api/getQueryClient';
+import { Footer } from '@/components/Footer';
+import { Header } from '@/components/Header';
+import { ProductsRequest } from '@/components/Products';
 
 export default async function ProductsPage() {
   const queryClient = getQueryClient();

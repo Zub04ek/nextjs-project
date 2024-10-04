@@ -1,7 +1,9 @@
-import { FormControl, Select, SelectChangeEvent, SelectProps, MenuItem, Checkbox } from '@mui/material';
-import { CheckBox, Check } from '@mui/icons-material';
-import { CheckboxStyles, MenuItemStyles, MenuProps, SelectStyles } from './ProductsSelect.styles';
 import { SetStateAction } from 'react';
+
+import { Check, CheckBox } from '@mui/icons-material';
+import { Checkbox, FormControl, MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
+
+import { CheckboxStyles, MenuItemStyles, MenuProps, SelectStyles } from './ProductsSelect.styles';
 
 type SelectFieldProps = SelectProps & {
   id: string;

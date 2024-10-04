@@ -1,8 +1,10 @@
+import { SetStateAction } from 'react';
 import Image from 'next/image';
+
 import { Chip } from '@mui/material';
+
 import { Product } from '@/types/types';
 import { ProductCardRating } from '../ProductCardRating';
-import { SetStateAction } from 'react';
 
 interface ProductCardProps {
   product: Product;

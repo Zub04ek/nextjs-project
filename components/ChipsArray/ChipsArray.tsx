@@ -1,5 +1,5 @@
-import { Chip, ChipProps } from '@mui/material';
 import { CloseOutlined } from '@mui/icons-material';
+import { Chip, ChipProps } from '@mui/material';
 
 type CustomChipProps = ChipProps & {
   selectLabel: string;

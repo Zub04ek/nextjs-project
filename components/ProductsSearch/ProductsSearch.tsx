@@ -1,6 +1,7 @@
-import { Paper, InputBase, IconButton } from '@mui/material';
-import { Search, CloseOutlined } from '@mui/icons-material';
 import { SetStateAction } from 'react';
+
+import { CloseOutlined, Search } from '@mui/icons-material';
+import { IconButton, InputBase, Paper } from '@mui/material';
 
 interface SearchBarProps {
   searchValue: string;

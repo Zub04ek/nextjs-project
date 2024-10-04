@@ -1,7 +1,9 @@
 'use client';
+
 import { Inter } from 'next/font/google';
-import { createTheme } from '@mui/material/styles';
+
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
+import { createTheme } from '@mui/material/styles';
 
 const inter = Inter({
   weight: ['400', '500', '700'],

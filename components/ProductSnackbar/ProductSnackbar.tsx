@@ -1,7 +1,8 @@
 'use client';
 
-import { Alert, Snackbar } from '@mui/material';
 import { SetStateAction } from 'react';
+
+import { Alert, Snackbar } from '@mui/material';
 
 interface ProductSnackbarProps {
   open: boolean;

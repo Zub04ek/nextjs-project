@@ -1,4 +1,5 @@
 import { SentimentDissatisfied } from '@mui/icons-material';
+
 import { BackButton } from '@/components/BackButton';
 
 export default function NotFound() {

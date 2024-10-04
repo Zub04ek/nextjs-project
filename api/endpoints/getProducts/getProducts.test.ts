@@ -1,6 +1,7 @@
-import { getProducts } from '@/api/endpoints/getProducts';
 import axios from 'axios';
+
 import { Product } from '@/types/types';
+import { getProducts } from '@/api/endpoints/getProducts';
 
 jest.mock('axios');
 

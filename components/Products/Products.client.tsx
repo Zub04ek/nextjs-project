@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
+import { CloseOutlined, KeyboardArrowUp } from '@mui/icons-material';
+import { Chip, Fab } from '@mui/material';
+
 import { Product, ProductFilters } from '@/types/types';
+import { useDebounce } from '@/hooks/useDebounce';
 import { ChipsArray } from '@/components/ChipsArray';
 import { ProductList, ProductListFilters } from '@/components/ProductList';
-import { useDebounce } from '@/hooks/useDebounce';
-import { Chip, Fab } from '@mui/material';
-import { CloseOutlined, KeyboardArrowUp } from '@mui/icons-material';
-import { ScrollTop } from '../ScrollTop';
 import { ProductSnackbar } from '../ProductSnackbar';
+import { ScrollTop } from '../ScrollTop';
 
 interface ProductsProps {
   products: Product[];
