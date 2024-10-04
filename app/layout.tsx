@@ -20,20 +20,20 @@ export const metadata: Metadata = {
     description: 'Get products from DummyJSON API',
     url: 'https://nextjs-project-eight-rust.vercel.app/',
     siteName: 'Next.js',
-    images: '/next-logo-opengraph.jpg',
-    // images: [
-    //   {
-    //     url: '/next-logo-opengraph.jpg',
-    //     width: 800,
-    //     height: 600,
-    //   },
-    //   {
-    //     url: '/next-logo-opengraph.jpg',
-    //     width: 1800,
-    //     height: 1600,
-    //     alt: 'NextJS logo',
-    //   },
-    // ],
+    // images: '/next-logo-opengraph.jpg',
+    images: [
+      {
+        url: '/next-logo-opengraph.jpg',
+        width: 800,
+        height: 600,
+      },
+      {
+        url: '/next-logo-opengraph.jpg',
+        width: 1800,
+        height: 1600,
+        alt: 'NextJS logo',
+      },
+    ],
     locale: 'en_US',
     type: 'website',
   },
