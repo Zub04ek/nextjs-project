@@ -1,17 +1,26 @@
 import { SetStateAction } from 'react';
 
 import { Check, CheckBox } from '@mui/icons-material';
-import { Checkbox, FormControl, MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
+import {
+  Checkbox,
+  FormControl,
+  MenuItem,
+  SelectProps as MuiSelectProps,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 
 import { CheckboxStyles, MenuItemStyles, MenuProps, SelectStyles } from './ProductsSelect.styles';
 
-type SelectFieldProps = SelectProps & {
+type SelectBaseProps = Omit<MuiSelectProps, ''>;
+
+interface SelectFieldProps extends SelectBaseProps {
   id: string;
   labelName?: string;
   options: Array<string>;
   selectValue: Array<string> | string;
   setValue: (value: SetStateAction<any>) => void;
-};
+}
 
 export const ProductsSelect = (props: SelectFieldProps) => {
   const { id, labelName, options, selectValue, setValue, multiple } = props;

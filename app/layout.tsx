@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import theme from '@/utils/theme';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
+
+import theme from '@/utils/theme';
 
 import './globals.css';
 
@@ -21,19 +22,19 @@ export const metadata: Metadata = {
     url: 'https://nextjs-project-eight-rust.vercel.app/',
     siteName: 'Next.js',
     // images: '/next-logo-opengraph.jpg',
-    images: [
-      {
-        url: '/next-logo-opengraph.jpg',
-        width: 800,
-        height: 600,
-      },
-      {
-        url: '/next-logo-opengraph.jpg',
-        width: 1800,
-        height: 1600,
-        alt: 'NextJS logo',
-      },
-    ],
+    // images: [
+    //   {
+    //     url: '/next-logo-opengraph.jpg',
+    //     width: 800,
+    //     height: 600,
+    //   },
+    //   {
+    //     url: '/next-logo-opengraph.jpg',
+    //     width: 1800,
+    //     height: 1600,
+    //     alt: 'NextJS logo',
+    //   },
+    // ],
     locale: 'en_US',
     type: 'website',
   },

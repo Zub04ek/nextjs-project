@@ -1,11 +1,11 @@
 import { CloseOutlined } from '@mui/icons-material';
 import { Chip, ChipProps } from '@mui/material';
 
-type CustomChipProps = ChipProps & {
+interface CustomChipProps extends ChipProps {
   selectLabel: string;
   chips: Array<string>;
   handleDelete: (selectLabel: string, chipToDelete: string) => void;
-};
+}
 
 export const ChipsArray = ({ selectLabel, chips, handleDelete }: CustomChipProps) => {
   return (
