@@ -4,11 +4,10 @@ import { Inter } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 
+import { TanstackProvider } from '@/providers/TanstackProvider';
 import theme from '@/utils/theme';
 
 import './globals.css';
-
-import { TanstackProvider } from '@/providers/TanstackProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 

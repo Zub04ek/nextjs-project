@@ -1,5 +1,6 @@
-import theme from '@/utils/theme';
 import { MenuProps as MuiMenuProps, SxProps } from '@mui/material';
+
+import theme from '@/utils/theme';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 12;

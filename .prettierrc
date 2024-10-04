@@ -13,8 +13,6 @@
     "",
     "<THIRD_PARTY_MODULES>",
     "",
-    "^types$",
-    "^@/env(.*)$",
     "^@/types/(.*)$",
     "^@/hooks/(.*)$",
     "^@/providers/(.*)$",
