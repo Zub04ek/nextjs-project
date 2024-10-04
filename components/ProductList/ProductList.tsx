@@ -22,7 +22,7 @@ export const ProductList = ({ products, setOpen }: ProductListProps) => {
     return (
       <div className="flex flex-1 flex-col items-center justify-center">
         <Image src="/icon-search-no-result.png" alt="file folder" width={140} height={140} />
-        <div className="text-2xl text-black">Oops, no results for this search!</div>
+        <div className="text-center text-2xl text-black">Oops, no results for this search!</div>
       </div>
     );
   }
