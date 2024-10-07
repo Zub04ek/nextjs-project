@@ -2,14 +2,15 @@
 
 import { SetStateAction } from 'react';
 
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, AlertProps, Snackbar } from '@mui/material';
 
-interface ProductSnackbarProps {
+interface ProductSnackbarProps extends AlertProps {
+  children?: string;
   open: boolean;
   setOpen: (value: SetStateAction<boolean>) => void;
 }
 
-export const ProductSnackbar = ({ open, setOpen }: ProductSnackbarProps) => {
+export const ProductSnackbar = ({ children, severity, open, setOpen }: ProductSnackbarProps) => {
   return (
     <Snackbar
       open={open}
@@ -17,8 +18,8 @@ export const ProductSnackbar = ({ open, setOpen }: ProductSnackbarProps) => {
       autoHideDuration={4000}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
     >
-      <Alert onClose={() => setOpen(false)} severity="info" variant="filled" sx={{ width: '100%' }}>
-        Product card detailing in the development process!
+      <Alert onClose={() => setOpen(false)} severity={severity} variant="filled" sx={{ width: '100%' }}>
+        {children}
       </Alert>
     </Snackbar>
   );

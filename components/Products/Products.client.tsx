@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
-import { CloseOutlined, KeyboardArrowUp } from '@mui/icons-material';
-import { Chip, Fab } from '@mui/material';
+import { CloseOutlined } from '@mui/icons-material';
+import { Chip } from '@mui/material';
 
 import { Product, ProductFilters } from '@/types/types';
 import { useDebounce } from '@/hooks/useDebounce';
 import { ChipsArray } from '@/components/ChipsArray';
 import { ProductList, ProductListFilters } from '@/components/ProductList';
 import { ProductSnackbar } from '../ProductSnackbar';
-import { ScrollTop } from '../ScrollTop';
 
 interface ProductsProps {
   products: Product[];
@@ -133,12 +132,9 @@ export const Products = ({ products }: ProductsProps) => {
         )}
       </ul>
       <ProductList products={visibleProducts} setOpen={setOpenToast} />
-      <ScrollTop>
-        <Fab size="small" aria-label="scroll back to top">
-          <KeyboardArrowUp />
-        </Fab>
-      </ScrollTop>
-      <ProductSnackbar open={openToast} setOpen={setOpenToast} />
+      <ProductSnackbar severity="info" open={openToast} setOpen={setOpenToast}>
+        Product card detailing in the development process!
+      </ProductSnackbar>
     </main>
   );
 };

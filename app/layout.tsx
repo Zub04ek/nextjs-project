@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 
 import { TanstackProvider } from '@/providers/TanstackProvider';
 import theme from '@/utils/theme';
+import { ScrollTop } from '@/components/ScrollTop';
 
 import './globals.css';
 
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
     title: 'Products',
     description: 'Get products from DummyJSON API',
     url: 'https://nextjs-project-eight-rust.vercel.app/',
-    siteName: 'Next.js',
+    siteName: 'Products',
     locale: 'en_US',
     type: 'website',
   },
@@ -35,7 +36,10 @@ export default function RootLayout({
       <body suppressHydrationWarning className="flex min-h-screen flex-col font-inter">
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <TanstackProvider>{children}</TanstackProvider>
+            <TanstackProvider>
+              {children}
+              <ScrollTop />
+            </TanstackProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
